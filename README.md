@@ -33,3 +33,15 @@ Usage:
   qot -select:firstname,mobile -from:'sample.csv' -where:'age < 30' -count:10 -orderby:age -desc
 
 ```
+
+## Working
+
+This program uses the `csv-parse` and `yargs` modules to parse CSV data and command-line arguments, respectively. The program filters the data based on the conditions specified by the `-where`, `-and`, and `-or` options and sorts the data based on the column specified by the `-orderby` option. The program also limits the number of rows displayed based on the value specified by the `-count` option.
+
+You can run this program from the command line by passing the appropriate arguments. For example:
+
+```
+node qot.js -select firstname,lastname,mobile,email -from sample.csv -where age<30 -count10 -orderby age -desc
+```
+
+This command will select the `firstname`, `lastname`, `mobile`, and `email` columns from the `sample.csv` file where the `age` is less than `30`. The results will be sorted by `age` in descending order and only the first `10` rows will be displayed.
