@@ -28,8 +28,9 @@ if (argv.help) {
 Syntax:
   qot (--help | -h)
   qot (--version | -v)
-  qot -select <columns> -from <filepath> -where <condition>
-  qot -select <columns> -from <filepath> -where <condition> -limit <number> -orderby <column> (-asc | -desc)
+  qot --select <columns> --from <filepath> --where <condition>
+  qot --select <columns> --from <filepath> --where <condition> --limit <number> --orderby <column> (--asc | --desc)
+  qot --select <columns> --from <filepath> (--csv | --tsv | --psv | --html | --json | --yaml)
 
 Options:
   -h --help                 Help description
@@ -47,11 +48,12 @@ Options:
      --htm                  Print in HTM format
      --html                 Print in HTML format
      --json                 Print in JSON format
+     --yaml                 Print in YAML format
 
 Usage:
-  qot -select firstname,lastname,mobile,email -from 'sample.csv' -where 'age<30' -limit 10 -orderby age -desc
-  qot -select=firstname,age,email -from='sample.csv' -where='age<30' -limit=10 -orderby=age -asc
-  qot -select:firstname,mobile -from:'sample.csv' -where:'age<30 and firstname=Mario' -limit:10`);
+  qot --select firstname,lastname,mobile,email --from 'sample.csv' --where 'age<30' --limit 10 --orderby age --desc
+  qot --select=firstname,age,email --from='sample.csv' --where='age<30' --limit=10 --orderby=age --asc
+  qot --select:firstname,mobile --from:'sample.csv' --where:'age<30 and firstname=Mario' --limit:10`);
 } else if (argv.version) {
   const pkg = fs.readFileSync('package.json', 'utf8');
   const { version } = JSON.parse(pkg);
