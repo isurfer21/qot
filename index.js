@@ -3,7 +3,8 @@
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import minimist from 'minimist';
-import ASTGenerator from './ast-generator.js';
+import ASTGenerator from './lib/ast-generator.js';
+import Tabulator from './lib/tabulator.js';
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
@@ -38,8 +39,14 @@ Options:
   -w --where <condition>    Filter condition
   -l --limit <rows>         Number of rows to display
   -o --orderby <column>     Order by column
-    -a --asc                Sort in ascending order
-    -d --desc               Sort in descending order
+  -a --asc                  Sort in ascending order
+  -d --desc                 Sort in descending order
+     --csv                  Print in CSV format
+     --tsv                  Print in TSV format
+     --psv                  Print in PSV format
+     --htm                  Print in HTM format
+     --html                 Print in HTML format
+     --json                 Print in JSON format
 
 Usage:
   qot -select firstname,lastname,mobile,email -from 'sample.csv' -where 'age<30' -limit 10 -orderby age -desc
@@ -68,10 +75,8 @@ Usage:
       const astGenerator = new ASTGenerator();
       const ast = astGenerator.generateAST(where);
       const expr = astGenerator.toJavaScript(ast);
-      console.log(expr);
-      // console.log(filteredRows);
+      console.log('Expression:', expr);
       filteredRows = filteredRows.filter(row => eval(expr));
-      // console.log(filteredRows);
     }
 
     if (orderby) {
@@ -86,8 +91,25 @@ Usage:
       filteredRows = filteredRows.slice(0, limit);
     }
 
-    for (const row of filteredRows) {
-      console.log(columns.map(column => row[column]).join(','));
+    if (argv.json) {
+      Tabulator.printAsJSON(columns, filteredRows);
+    } else if (argv.yaml) {
+      Tabulator.printAsYAML(columns, filteredRows);
+    } else {
+      let tabulatedData = Tabulator.toTable(columns, filteredRows);
+      if (argv.csv) {
+        Tabulator.printAsCSV(tabulatedData);
+      } else if (argv.tsv) {
+        Tabulator.printAsTSV(tabulatedData);
+      } else if (argv.psv) {
+        Tabulator.printAsPSV(tabulatedData);
+      } else if (argv.htm) {
+        Tabulator.printAsHTM(tabulatedData);
+      } else if (argv.html) {
+        Tabulator.printAsHTML(tabulatedData);
+      } else {
+        Tabulator.printAsTable(tabulatedData);
+      }
     }
   }
 }

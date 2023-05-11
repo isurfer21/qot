@@ -20,7 +20,8 @@
   "homepage": "https://github.com/isurfer21/qot#readme",
   "dependencies": {
     "csv-parse": "^5.3.10",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "yaml": "^2.2.2"
   },
   "keys": [
     "CLI",
