@@ -1,29 +1,12 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import { parse } from 'csv-parse/sync';
 import minimist from 'minimist';
-import ASTGenerator from './lib/ast-generator.js';
+import WhereAST from './lib/where-ast.js';
 import Tabulator from './lib/tabulator.js';
 
-const argv = minimist(process.argv.slice(2), {
-  alias: {
-    h: 'help',
-    v: 'version',
-    s: 'select',
-    f: 'from',
-    w: 'where',
-    l: 'limit',
-    o: 'orderby',
-    a: 'asc',
-    d: 'desc'
-  }
-});
-
-console.log(argv)
-
-if (argv.help) {
-  console.log(`QoT - Query over Table
+const helpMenu = `QoT - Query over Table
 
 Syntax:
   qot (--help | -h)
@@ -51,67 +34,110 @@ Options:
      --yaml                 Print in YAML format
 
 Usage:
+  qot --select * --from 'sample.csv'
   qot --select firstname,lastname,mobile,email --from 'sample.csv' --where 'age<30' --limit 10 --orderby age --desc
   qot --select=firstname,age,email --from='sample.csv' --where='age<30' --limit=10 --orderby=age --asc
-  qot --select:firstname,mobile --from:'sample.csv' --where:'age<30 and firstname=Mario' --limit:10`);
-} else if (argv.version) {
-  const pkg = fs.readFileSync('package.json', 'utf8');
-  const { version } = JSON.parse(pkg);
-  console.log(`QoT version ${version}`);
-} else {
-  // Add your code here to handle the other arguments and perform the query over table operation.
-  if (argv.select && argv.from) {
-    const file = fs.readFileSync(argv.from);
-    const rows = parse(file, { columns: true });
+  qot --select:firstname,mobile --from:'sample.csv' --where:'age<30 and firstname=Mario' --limit:10`;
 
-    const columns = argv.select.split(',');
-    const where = argv.where;
-    const limit = argv.limit;
-    const orderby = argv.orderby;
-    const asc = argv.asc;
-    const desc = argv.desc;
+const argv = minimist(process.argv.slice(2), {
+  alias: {
+    h: 'help',
+    v: 'version',
+    s: 'select',
+    f: 'from',
+    w: 'where',
+    l: 'limit',
+    o: 'orderby',
+    a: 'asc',
+    d: 'desc'
+  }
+});
 
-    let filteredRows = rows;
-
-    if (where) {
-      const astGenerator = new ASTGenerator();
-      const ast = astGenerator.generateAST(where);
-      const expr = astGenerator.toJavaScript(ast);
-      console.log('Expression:', expr);
-      filteredRows = filteredRows.filter(row => eval(expr));
+async function main() {
+  console.log(argv)
+  if (argv.help) {
+    console.log(helpMenu);
+  } else if (argv.version) {
+    try {
+      const pkg = await fs.readFile('package.json', 'utf8');
+      const { version } = JSON.parse(pkg);
+      console.log(`QoT version ${version}`);
+    } catch (err) {
+      console.error(err.message);
+      process.exit(1);
     }
+  } else {
+    // Add your code here to handle the other arguments and perform the query over table operation.
+    if (argv.select && argv.from) {
+      let rows;
+      try {
+        const file = await fs.readFile(argv.from);
+        rows = parse(file, { columns: true });
+      } catch (err) {
+        console.error(err.message);
+        process.exit(1);
+      }
 
-    if (orderby) {
-      filteredRows.sort((a, b) => {
-        if (a[orderby] < b[orderby]) return asc ? -1 : 1;
-        if (a[orderby] > b[orderby]) return asc ? 1 : -1;
-        return 0;
-      });
-    }
+      const select = argv.select;
+      const where = argv.where;
+      const limit = argv.limit;
+      const orderby = argv.orderby;
+      const asc = argv.asc;
+      const desc = argv.desc;
 
-    if (limit) {
-      filteredRows = filteredRows.slice(0, limit);
-    }
+      let filteredRows = rows;
 
-    if (argv.json) {
-      Tabulator.printAsJSON(columns, filteredRows);
-    } else if (argv.yaml) {
-      Tabulator.printAsYAML(columns, filteredRows);
-    } else {
-      let tabulatedData = Tabulator.toTable(columns, filteredRows);
-      if (argv.csv) {
-        Tabulator.printAsCSV(tabulatedData);
-      } else if (argv.tsv) {
-        Tabulator.printAsTSV(tabulatedData);
-      } else if (argv.psv) {
-        Tabulator.printAsPSV(tabulatedData);
-      } else if (argv.htm) {
-        Tabulator.printAsHTM(tabulatedData);
-      } else if (argv.html) {
-        Tabulator.printAsHTML(tabulatedData);
+      let columns = [];
+      if (select) {
+        if (select.trim() == '*') {
+          columns = Object.keys(rows[0]);
+        } else {
+          columns = select.split(',');
+        }
+      }
+
+      if (where) {
+        const whereAST = new WhereAST();
+        const ast = whereAST.generateAST(where);
+        const expr = whereAST.toJavaScript(ast);
+        console.log('Expression:', expr);
+        filteredRows = filteredRows.filter(row => eval(expr));
+      }
+
+      if (orderby) {
+        filteredRows.sort((a, b) => {
+          if (a[orderby] < b[orderby]) return asc ? -1 : 1;
+          if (a[orderby] > b[orderby]) return asc ? 1 : -1;
+          return 0;
+        });
+      }
+
+      if (limit) {
+        filteredRows = filteredRows.slice(0, limit);
+      }
+
+      if (argv.json) {
+        Tabulator.printAsJSON(columns, filteredRows);
+      } else if (argv.yaml) {
+        Tabulator.printAsYAML(columns, filteredRows);
       } else {
-        Tabulator.printAsTable(tabulatedData);
+        let tabulatedData = Tabulator.toTable(columns, filteredRows);
+        if (argv.csv) {
+          Tabulator.printAsCSV(tabulatedData);
+        } else if (argv.tsv) {
+          Tabulator.printAsTSV(tabulatedData);
+        } else if (argv.psv) {
+          Tabulator.printAsPSV(tabulatedData);
+        } else if (argv.htm) {
+          Tabulator.printAsHTM(tabulatedData);
+        } else if (argv.html) {
+          Tabulator.printAsHTML(tabulatedData);
+        } else {
+          Tabulator.printAsTable(tabulatedData);
+        }
       }
     }
   }
 }
+
+main();

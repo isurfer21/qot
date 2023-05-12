@@ -1,5 +1,5 @@
 {
-  "name": "qot",
+  "name": "qot-cli",
   "version": "1.0.0",
   "description": "Query over Table (QoT) CLI can be used to query over CSV",
   "type": "module",

@@ -1,4 +1,5 @@
 # qot
+
 **Query over Table**, a.k.a., **QoT** is a command-line tool that allows you to query data from tables or sheets.
 
 ## Introduction
@@ -31,7 +32,8 @@ You should have these applications installed at your system.
 You can install it at your system via npm
 
 ```
-npm install qot --global
+npm install qot-cli --global
+qot -v
 ```
 
 ## Manual Setup
@@ -78,13 +80,40 @@ Options:
      --yaml                 Print in YAML format
 
 Usage:
+  qot --select * --from 'sample.csv'
   qot --select firstname,lastname,mobile,email --from 'sample.csv' --where 'age<30' --limit 10 --orderby age --desc
   qot --select=firstname,age,email --from='sample.csv' --where='age<30' --limit=10 --orderby=age --asc
   qot --select:firstname,mobile --from:'sample.csv' --where:'age<30 and firstname=Mario' --limit:10
 
 ```
 
-For more detailed information on how to use QoT, please refer to the [documentation](https://github.com/isurfer21/qot/wiki).
+### Tips
+
+When defining a query statement, it's important to consider the conditions in the `WHERE` clause. If the column name or cell value contains spaces, you can use one of the following formats on the command line to avoid unintended results.
+
+1. When the entire statement is enclosed in single quotes ('), the operands should be contained within back quotes (\`).
+
+```
+`Column Name` = `Value`
+```
+
+e.g., if you want to search for rows where the `Job Title` is `Market Researcher`, you can use one of the following queries:
+
+```
+`Job Title` = `Market Researcher`
+```
+
+2. When the entire statement is enclosed in double quotes ("), the words should be contained within back quotes (').
+
+```
+'Column Name' = 'Value'
+```
+
+e.g., if you want to search for rows where the `Job Title` is `Market Researcher`, you can use one of the following queries:
+
+```
+'Job Title' = 'Market Researcher'
+```
 
 ## Contributing
 
