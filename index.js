@@ -9,15 +9,19 @@ import Tabulator from './lib/tabulator.js';
 const helpMenu = `QoT - Query over Table
 
 Syntax:
+  qot [options]
+
   qot (--help | -h)
   qot (--version | -v)
-  qot --select <columns> --from <filepath> --where <condition>
+
+  qot --select <columns> --from <filepath> --where <condition> (--verbose)
   qot --select <columns> --from <filepath> --where <condition> --limit <number> --orderby <column> (--asc | --desc)
   qot --select <columns> --from <filepath> (--csv | --tsv | --psv | --html | --json | --yaml)
 
 Options:
   -h --help                 Help description
   -v --version              Version information
+
   -s --select <columns>     Select columns to display
   -f --from <filepath>      File path of table or sheet
   -w --where <condition>    Filter condition
@@ -25,6 +29,9 @@ Options:
   -o --orderby <column>     Order by column
   -a --asc                  Sort in ascending order
   -d --desc                 Sort in descending order
+
+  -V --verbose              For troubleshooting
+
      --csv                  Print in CSV format
      --tsv                  Print in TSV format
      --psv                  Print in PSV format
@@ -49,12 +56,14 @@ const argv = minimist(process.argv.slice(2), {
     l: 'limit',
     o: 'orderby',
     a: 'asc',
-    d: 'desc'
+    d: 'desc',
+    V: 'verbose'
   }
 });
 
 async function main() {
-  console.log(argv)
+  const verbose = !!argv?.verbose;
+  verbose && console.log('Arguments:', argv);
   if (argv.help) {
     console.log(helpMenu);
   } else if (argv.version) {
@@ -67,7 +76,7 @@ async function main() {
       process.exit(1);
     }
   } else {
-    // Add your code here to handle the other arguments and perform the query over table operation.
+    // Handle the other arguments and perform the query over table operation.
     if (argv.select && argv.from) {
       let rows;
       try {
@@ -97,10 +106,10 @@ async function main() {
       }
 
       if (where) {
-        const whereAST = new WhereAST();
+        const whereAST = new WhereAST(verbose);
         const ast = whereAST.generateAST(where);
         const expr = whereAST.toJavaScript(ast);
-        console.log('Expression:', expr);
+        verbose && console.log('Expression:', expr);
         filteredRows = filteredRows.filter(row => eval(expr));
       }
 

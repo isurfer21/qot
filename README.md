@@ -55,15 +55,19 @@ $ qot --help
 QoT - Query over Table
 
 Syntax:
+  qot [options]
+
   qot (--help | -h)
   qot (--version | -v)
-  qot --select <columns> --from <filepath> --where <condition>
+
+  qot --select <columns> --from <filepath> --where <condition> (--verbose)
   qot --select <columns> --from <filepath> --where <condition> --limit <number> --orderby <column> (--asc | --desc)
   qot --select <columns> --from <filepath> (--csv | --tsv | --psv | --html | --json | --yaml)
 
 Options:
   -h --help                 Help description
   -v --version              Version information
+
   -s --select <columns>     Select columns to display
   -f --from <filepath>      File path of table or sheet
   -w --where <condition>    Filter condition
@@ -71,6 +75,9 @@ Options:
   -o --orderby <column>     Order by column
   -a --asc                  Sort in ascending order
   -d --desc                 Sort in descending order
+
+  -V --verbose              For troubleshooting
+
      --csv                  Print in CSV format
      --tsv                  Print in TSV format
      --psv                  Print in PSV format
