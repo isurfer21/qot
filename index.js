@@ -3,7 +3,8 @@
 import { promises as fs } from 'fs';
 import { parse } from 'csv-parse/sync';
 import minimist from 'minimist';
-import WhereAST from './lib/where-ast.js';
+import SelectAST from './lib/select/select-ast.js';
+import WhereAST from './lib/where/where-ast.js';
 import Tabulator from './lib/tabulator.js';
 
 const helpMenu = `QoT - Query over Table
@@ -98,18 +99,18 @@ async function main() {
 
       let columns = [];
       if (select) {
-        if (select.trim() == '*') {
-          columns = Object.keys(rows[0]);
-        } else {
-          columns = select.split(',');
-        }
+        const selectAST = new SelectAST(verbose);
+        const ast = selectAST.generateAst(select);
+        const columnIds = Object.keys(rows[0]);
+        columns = selectAST.toColumns(ast, columnIds);
+        verbose && console.log('Select Columns:', columns);
       }
 
       if (where) {
         const whereAST = new WhereAST(verbose);
-        const ast = whereAST.generateAST(where);
+        const ast = whereAST.generateAst(where);
         const expr = whereAST.toJavaScript(ast);
-        verbose && console.log('Expression:', expr);
+        verbose && console.log('Where Expression:', expr);
         filteredRows = filteredRows.filter(row => eval(expr));
       }
 
