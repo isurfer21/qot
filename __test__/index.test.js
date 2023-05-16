@@ -20,27 +20,96 @@ describe('Main', () => {
     expect(stdout).toMatch(/QoT version \d\.\d\.\d/gm);
   });
 
-  test('Query CSV', async () => {
-    // Run a command in a shell using exec
-    const fromCsv = path.join('__test__', 'data', 'people.csv');
-    const selectColumn = "'First Name', 'Last Name', Sex as Gender";
-    const whereClause = "'Job Title'='Market researcher'";
-    const { stdout, stderr } = await $(
-      `node index.js --select "${selectColumn}" --from "${fromCsv}" --where "${whereClause}" --limit 10 --json`
-    );
-    // Check for stderr
-    if (!!stderr) {
-      expect(() => {
-        throw new Error(stderr);
-      }).toThrow();
+  // Define some test cases with input and expected output
+  const testCases = [
+    {
+      input: {
+        select: "'First Name', 'Last Name', Sex as Gender",
+        where: "'Job Title'='Market researcher'",
+        limit: 1
+      },
+      output: [
+        {
+          'First Name': 'Yesenia',
+          'Last Name': 'Martinez',
+          'Gender': 'Male'
+        }
+      ]
+    },
+    {
+      input: {
+        select: '*',
+        where: '`First Name`="Mario"',
+        limit: 1
+      },
+      output: [
+        {
+          'Index': '86',
+          'User Id': 'CB19EafEbBfF9eC',
+          'First Name': 'Mario',
+          'Last Name': 'Vaughn',
+          'Sex': 'Male',
+          'Email': 'oblake@example.com',
+          'Phone': '160-144-5039x12276',
+          'Date of birth': '1990-07-08',
+          'Job Title': 'Research scientist (life sciences)'
+        }
+      ]
+    },
+    {
+      input: {
+        select: "'First Name', 'Last Name', Sex as Gender",
+        where: "Sex='Male' and 'First Name' not in ('Lori', 'Shelby', 'Erin')",
+        limit: 5
+      },
+      output: [
+        {
+          'First Name': 'Kristine',
+          'Last Name': 'Travis',
+          'Gender': 'Male'
+        },
+        {
+          'First Name': 'Yesenia',
+          'Last Name': 'Martinez',
+          'Gender': 'Male'
+        },
+        {
+          'First Name': 'Ricardo',
+          'Last Name': 'Hinton',
+          'Gender': 'Male'
+        },
+        {
+          'First Name': 'Dave',
+          'Last Name': 'Farrell',
+          'Gender': 'Male'
+        },
+        {
+          'First Name': 'Isaiah',
+          'Last Name': 'Downs',
+          'Gender': 'Male'
+        }
+      ]
     }
-    // Expect the standard output to match query output
-    expect(JSON.parse(stdout)).toEqual([
-      {
-        'First Name': 'Yesenia',
-        'Last Name': 'Martinez',
-        Gender: 'Male'
+  ];
+
+  // Set the filepath of sample data in '.csv' format
+  const fromCsv = path.join('__test__', 'data', 'people.csv');
+
+  // Write a test for each test case using the test() function
+  testCases.forEach(testCase => {
+    test(`Query spreadsheet "SELECT ${testCase.input.select} WHERE ${testCase.input.where}"`, async () => {
+      // Run a command in a shell using exec
+      const { stdout, stderr } = await $(
+        `node index.js --select "${testCase.input.select}" --from "${fromCsv}" --where "${testCase.input.where}" --limit ${testCase.input.limit} --json`
+      );
+      // Check for stderr
+      if (!!stderr) {
+        expect(() => {
+          throw new Error(stderr);
+        }).toThrow();
       }
-    ]);
+      // Expect the standard output to match query output
+      expect(JSON.parse(stdout)).toEqual(testCase.output);
+    });
   });
 });
