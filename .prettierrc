@@ -4,7 +4,7 @@
   "semi": true,
   "singleQuote": true,
   "useTabs": false,
-  "quoteProps": "as-needed",
+  "quoteProps": "consistent",
   "arrowParens": "avoid",
   "array": ["preserve"],
   "printWidth": 120
