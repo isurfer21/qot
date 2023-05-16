@@ -27,23 +27,23 @@ describe('WhereLexer', () => {
     },
     {
       input: 'country <> "USA"',
-      output: ['country', '<>', '"USA"'],
+      output: ['country', '<>', '"USA"']
     },
     {
       input: 'price NOT BETWEEN 10 AND 20',
-      output: ['price', 'NOT', 'BETWEEN', '10', 'AND', '20'],
+      output: ['price', 'NOT', 'BETWEEN', '10', 'AND', '20']
     },
     {
       input: 'order_date NOT IN ("2021-01-01", "2021-01-31")',
-      output: ['order_date', 'NOT', 'IN', '(', '"2021-01-01"', ',', '"2021-01-31"', ')'],
+      output: ['order_date', 'NOT', 'IN', '(', '"2021-01-01"', ',', '"2021-01-31"', ')']
     },
     {
       input: 'name NOT LIKE "John%"',
-      output: ['name', 'NOT', 'LIKE', '"John%"'],
+      output: ['name', 'NOT', 'LIKE', '"John%"']
     },
     {
       input: 'genre IS NOT NULL',
-      output: ['genre', 'IS', 'NOT', 'NULL'],
+      output: ['genre', 'IS', 'NOT', 'NULL']
     },
     {
       input: 'invalid expression',
