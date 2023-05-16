@@ -28,7 +28,12 @@ describe('Where Parser', () => {
           left: { type: 'Literal', value: 'age' },
           right: { type: 'Literal', value: 18 }
         },
-        right: { type: 'Literal', value: 'gender' }
+        right: {
+          type: 'BinaryExpression',
+          operator: '!=',
+          left: { type: 'Literal', value: 'gender' },
+          right: { type: 'Literal', value: 'F' }
+        }
       }
     },
     {
@@ -136,9 +141,81 @@ describe('Where Parser', () => {
     });
   });
 
+  // Define some test cases with input and expected output for the capitalizeReservedWords method
+  const capitalizeReservedWordsTestCases = [
+    {
+      input: ['age', '>=', '18', 'and', 'gender', '<>', '"F"'],
+      output: ['age', '>=', '18', 'AND', 'gender', '<>', '"F"']
+    },
+    {
+      input: ['age', '>=', '21', 'or', 'gender', '=', '"M"'],
+      output: ['age', '>=', '21', 'OR', 'gender', '=', '"M"']
+    },
+    {
+      input: ['price', 'not', 'between', '10', 'and', '20'],
+      output: ['price', 'NOT', 'BETWEEN', '10', 'AND', '20']
+    }
+  ];
+
+  // Write a test for each test case using the test() function
+  capitalizeReservedWordsTestCases.forEach(testCase => {
+    test(`capitalizeReservedWords '${testCase.input}'`, () => {
+      // Call the parseExpression method with the input
+      const ast = whereParser.capitalizeReservedWords(testCase.input);
+      // Expect the ast to match the output
+      expect(ast).toEqual(testCase.output);
+    });
+  });
+
   // Define some test cases with input and expected output for the parseExpression method
   const parseExpressionTestCases = [
-    // Same as parseTestCases
+    {
+      input: ['age', '>=', '18', 'AND', 'gender', '<>', '"F"'],
+      output: {
+        type: 'LogicalExpression',
+        operator: 'AND',
+        left: {
+          type: 'BinaryExpression',
+          operator: '>=',
+          left: { type: 'Literal', value: 'age' },
+          right: { type: 'Literal', value: 18 }
+        },
+        right: {
+          type: 'BinaryExpression',
+          operator: '<>',
+          left: { type: 'Literal', value: 'gender' },
+          right: { type: 'Literal', value: 'F' }
+        }
+      }
+    },
+    {
+      input: ['age', '>=', '21', 'OR', 'gender', '=', '"M"'],
+      output: {
+        type: 'LogicalExpression',
+        operator: 'OR',
+        left: {
+          type: 'BinaryExpression',
+          operator: '>=',
+          left: { type: 'Literal', value: 'age' },
+          right: { type: 'Literal', value: 21 }
+        },
+        right: {
+          type: 'BinaryExpression',
+          operator: '=',
+          left: { type: 'Literal', value: 'gender' },
+          right: { type: 'Literal', value: 'M' }
+        }
+      }
+    },
+    {
+      input: ['price', 'NOT', 'BETWEEN', '10', 'AND', '20'],
+      output: {
+        type: 'NotBetweenExpression',
+        left: { type: 'Literal', value: 'price' },
+        min: { type: 'Literal', value: 10 },
+        max: { type: 'Literal', value: 20 }
+      }
+    }
   ];
 
   // Write a test for each test case using the test() function
@@ -153,7 +230,36 @@ describe('Where Parser', () => {
 
   // Define some test cases with input and expected output for the parseCondition method
   const parseConditionTestCases = [
-    // Same as parseTestCases
+    {
+      input: ['name', '=', '"John"'],
+      output: {
+        type: 'BinaryExpression',
+        operator: '=',
+        left: { type: 'Literal', value: 'name' },
+        right: { type: 'Literal', value: 'John' }
+      }
+    },
+    {
+      input: ['country', '<>', '"USA"'],
+      output: {
+        type: 'BinaryExpression',
+        operator: '<>',
+        left: { type: 'Literal', value: 'country' },
+        right: { type: 'Literal', value: 'USA' }
+      }
+    },
+    {
+      input: ['NOT', 'salary', '<', '5000'],
+      output: {
+        type: 'NotExpression',
+        argument: {
+          type: 'BinaryExpression',
+          operator: '<',
+          left: { type: 'Literal', value: 'salary' },
+          right: { type: 'Literal', value: 5000 }
+        }
+      }
+    }
   ];
 
   // Write a test for each test case using the test() function
