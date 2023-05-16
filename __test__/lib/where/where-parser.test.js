@@ -7,7 +7,8 @@ describe('Where Parser', () => {
   const whereParser = new WhereParser();
 
   // Define some test cases with input and expected output for the parse method
-  const parseTestCases = [{
+  const parseTestCases = [
+    {
       input: ['name', '=', '"John"'],
       output: {
         type: 'BinaryExpression',
@@ -108,7 +109,8 @@ describe('Where Parser', () => {
   });
 
   // Define some test cases with input and expected output for the parseValue method
-  const parseValueTestCases = [{
+  const parseValueTestCases = [
+    {
       input: ['"John"'],
       output: { type: 'Literal', value: 'John' }
     },
