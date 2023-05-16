@@ -1,3 +1,4 @@
+import {jest, describe, expect, test, beforeEach, afterEach} from '@jest/globals';
 import Tabulator from '../../lib/Tabulator';
 import YAML from 'yaml';
 
@@ -144,7 +145,7 @@ describe('Tabulator', () => {
     // Assert
     expect(console.log).toHaveBeenCalledTimes(1); // One call for the whole table
     expect(console.log).toHaveBeenCalledWith(
-      `<table><thead><tr><th>ID</th><th>Name</th><th>Age</th></tr></thead><tbody><tr><td>1</td><td>Alice</td><td>25</td></tr><tr><td>2</td><td>Bob</td><td>30</td></tr><tr><td>3</td><td>Charlie</td><td>35</td></tr></tbody></table>`
+      '<table><thead><tr><th>ID</th><th>Name</th><th>Age</th></tr></thead><tbody><tr><td>1</td><td>Alice</td><td>25</td></tr><tr><td>2</td><td>Bob</td><td>30</td></tr><tr><td>3</td><td>Charlie</td><td>35</td></tr></tbody></table>'
     ); // The expected HTML output
   });
 

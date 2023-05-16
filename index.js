@@ -2,6 +2,7 @@
 
 import { promises as fs } from 'fs';
 import { parse } from 'csv-parse/sync';
+import process from 'node:process';
 import minimist from 'minimist';
 import SelectAST from './lib/select/select-ast.js';
 import WhereAST from './lib/where/where-ast.js';

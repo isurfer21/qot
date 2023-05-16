@@ -1,3 +1,4 @@
+import {describe, expect, test, beforeEach} from '@jest/globals';
 import SelectLexer from '../../../lib/select/select-lexer';
 
 describe('Select Lexer', () => {
@@ -11,7 +12,7 @@ describe('Select Lexer', () => {
     expect(lexer.tokenize('')).toEqual([]);
   });
 
-  test('tokenize returns an array of tokens for a valid expression', () => {
+  test('tokenize returns an array of tokens for a valid expression with asterisk', () => {
     const expression = '*';
     const expectedTokens = [{ type: 'asterisk', value: '*' }];
     expect(lexer.tokenize(expression)).toEqual(expectedTokens);
@@ -85,7 +86,7 @@ describe('Select Lexer', () => {
       { type: 'parenthesis', value: '(' },
       { type: 'identifier', value: 'col5' },
       { type: 'parenthesis', value: ')' }
-    ]
+    ];
     expect(lexer.tokenize(expression)).toEqual(expectedTokens);
   });
 
@@ -133,7 +134,7 @@ describe('Select Lexer', () => {
       { type: 'identifier', value: 'Col II' },
       { type: 'comma', value: ',' },
       { type: 'identifier', value: 'col 3 %' }
-    ]
+    ];
     expect(lexer.tokenize(expression)).toEqual(expectedTokens);
   });
 });
