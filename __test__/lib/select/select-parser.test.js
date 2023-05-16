@@ -1,4 +1,4 @@
-import {describe, expect, test, beforeEach} from '@jest/globals';
+import { describe, expect, test, beforeEach } from '@jest/globals';
 import SelectParser from '../../../lib/select/select-parser';
 
 describe('Select Parser', () => {

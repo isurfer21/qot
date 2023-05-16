@@ -1,4 +1,4 @@
-import {describe, expect, test, beforeEach} from '@jest/globals';
+import { describe, expect, test, beforeEach } from '@jest/globals';
 import SelectLexer from '../../../lib/select/select-lexer';
 
 describe('Select Lexer', () => {

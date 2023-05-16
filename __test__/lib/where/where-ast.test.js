@@ -1,4 +1,4 @@
-import {describe, expect, test} from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 import WhereAST from '../../../lib/where/where-ast';
 
 describe('Where AST', () => {

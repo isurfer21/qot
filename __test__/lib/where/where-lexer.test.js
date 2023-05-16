@@ -1,4 +1,4 @@
-import {describe, expect, test, beforeEach} from '@jest/globals';
+import { describe, expect, test, beforeEach } from '@jest/globals';
 import WhereLexer from '../../../lib/where/where-lexer';
 
 // Define a test suite for the WhereLexer class

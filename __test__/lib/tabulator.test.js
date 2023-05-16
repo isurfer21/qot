@@ -1,4 +1,4 @@
-import {jest, describe, expect, test, beforeEach, afterEach} from '@jest/globals';
+import { jest, describe, expect, test, beforeEach, afterEach } from '@jest/globals';
 import Tabulator from '../../lib/Tabulator';
 import YAML from 'yaml';
 
@@ -37,7 +37,7 @@ describe('Tabulator', () => {
     // Restore the original console.log function
     console.log = originalLog;
   });
-  
+
   test('toTable converts columns and rows into a 2D array', () => {
     // Arrange
     const { columns, rows } = sampleColumnsAndRows;
