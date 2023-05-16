@@ -46,6 +46,10 @@ describe('WhereLexer', () => {
       output: ['genre', 'IS', 'NOT', 'NULL']
     },
     {
+      input: 'NOT salary < 5000',
+      output: ['NOT', 'salary', '<', '5000']
+    },
+    {
       input: 'invalid expression',
       output: ['invalid', 'expression']
     }

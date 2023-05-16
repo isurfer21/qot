@@ -63,6 +63,64 @@ describe('Where Parser', () => {
       }
     },
     {
+      input: ['country', '<>', '"USA"'],
+      output: {
+        type: 'BinaryExpression',
+        operator: '<>',
+        left: { type: 'Literal', value: 'country' },
+        right: { type: 'Literal', value: 'USA' }
+      }
+    },
+    {
+      input: ['price', 'NOT', 'BETWEEN', '10', 'AND', '20'],
+      output: {
+        type: 'NotBetweenExpression',
+        left: { type: 'Literal', value: 'price' },
+        min: { type: 'Literal', value: 10 },
+        max: { type: 'Literal', value: 20 }
+      }
+    },
+    {
+      input: ['order_date', 'NOT', 'IN', '(', '"2021-01-01"', ',', '"2021-01-31"', ')'],
+      output: {
+        type: 'NotInExpression',
+        left: { type: 'Literal', value: 'order_date' },
+        values: [
+          { type: 'Literal', value: '2021-01-01' },
+          { type: 'Literal', value: '2021-01-31' }
+        ]
+      }
+    },
+    {
+      input: ['name', 'NOT', 'LIKE', '"John%"'],
+      output: {
+        type: 'NotLikeExpression',
+        left: { type: 'Literal', value: 'name' },
+        right: { type: 'Literal', value: 'John%' }
+      }
+    },
+    {
+      input: ['genre', 'IS', 'NOT', 'NULL'],
+      output: {
+        type: 'IsExpression',
+        operator: 'IS NOT',
+        left: { type: 'Literal', value: 'genre' },
+        right: { type: 'Literal', value: null }
+      }
+    },
+    {
+      input: ['NOT', 'salary', '<', '5000'],
+      output: {
+        type: 'NotExpression',
+        argument: {
+          type: 'BinaryExpression',
+          operator: '<',
+          left: { type: 'Literal', value: 'salary' },
+          right: { type: 'Literal', value: 5000 }
+        }
+      }
+    },
+    {
       input: ['invalid', 'expression'],
       output: { type: 'Literal', value: 'invalid' }
     }
