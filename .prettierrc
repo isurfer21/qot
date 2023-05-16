@@ -6,5 +6,6 @@
   "useTabs": false,
   "quoteProps": "as-needed",
   "arrowParens": "avoid",
-  "array": ["preserve"]
+  "array": ["preserve"],
+  "printWidth": 120
 }
