@@ -89,6 +89,20 @@ describe('Main', () => {
           'Gender': 'Male'
         }
       ]
+    },
+    {
+      input: {
+        select: "'First Name', 'Last Name', Count(Sex) as Gender",
+        where: "Sex='Male'",
+        limit: 100
+      },
+      output: [
+        {
+          'First Name': 'n/a',
+          'Last Name': 'n/a',
+          'Gender': 47
+        }
+      ]
     }
   ];
 

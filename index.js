@@ -96,15 +96,18 @@ async function main() {
       const asc = argv.asc;
       const desc = argv.desc;
 
-      let filteredRows = rows;
+      let filteredRows = rows,
+        columns = [],
+        aggregates = [];
 
-      let columns = [];
       if (select) {
         const selectAST = new SelectAST(verbose);
         const ast = selectAST.generateAst(select);
         const columnIds = Object.keys(rows[0]);
         columns = selectAST.toColumns(ast, columnIds);
         verbose && console.log('Select Columns:', columns);
+        aggregates = selectAST.aggregators(ast);
+        verbose && console.log('Select Aggregates:', aggregates);
       }
 
       if (where) {
@@ -127,12 +130,59 @@ async function main() {
         filteredRows = filteredRows.slice(0, limit);
       }
 
+      let finalRows = filteredRows;
+
+      if (Object.keys(aggregates).length > 0) {
+        let aggregatedRow = {};
+        for (let column in aggregates) {
+          const aggregateMethod = aggregates[column];
+          // Assuming the array of rows is called filteredRows where each row consist column-values as KV pairs
+          switch (aggregateMethod) {
+            case 'COUNT':
+              // Calculate the number of rows that have a value for the column
+              let count = filteredRows.filter(row => row[column] != null).length;
+              aggregatedRow[column] = count;
+              break;
+            case 'SUM':
+              // Calculate the sum of the values of the column for all rows
+              let sum = filteredRows.reduce((acc, row) => acc + row[column], 0);
+              aggregatedRow[column] = sum;
+              break;
+            case 'AVG':
+              // Calculate the average of the values of the column for all rows
+              let avg = filteredRows.reduce((acc, row) => acc + row[column], 0) / filteredRows.length;
+              aggregatedRow[column] = avg;
+              break;
+            case 'MIN':
+              // Calculate the minimum value of the column for all rows
+              let min = Math.min(...filteredRows.map(row => row[column]));
+              aggregatedRow[column] = min;
+              break;
+            case 'MAX':
+              // Calculate the maximum value of the column for all rows
+              let max = Math.max(...filteredRows.map(row => row[column]));
+              aggregatedRow[column] = max;
+              break;
+          }
+        }
+        if (Object.keys(aggregatedRow).length > 0) {
+          finalRows = [filteredRows.shift()];
+          for (let column in finalRows[0]) {
+            if(Object.keys(aggregates).includes(column)) {
+              finalRows[0][column] = aggregatedRow[column];
+            } else {
+              finalRows[0][column] = 'n/a';
+            }
+          }
+        }
+      }
+
       if (argv.json) {
-        Tabulator.printAsJSON(columns, filteredRows);
+        Tabulator.printAsJSON(columns, finalRows);
       } else if (argv.yaml) {
-        Tabulator.printAsYAML(columns, filteredRows);
+        Tabulator.printAsYAML(columns, finalRows);
       } else {
-        let tabulatedData = Tabulator.toTable(columns, filteredRows);
+        let tabulatedData = Tabulator.toTable(columns, finalRows);
         if (argv.csv) {
           Tabulator.printAsCSV(tabulatedData);
         } else if (argv.tsv) {

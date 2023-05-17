@@ -71,7 +71,7 @@ describe('Select AST', () => {
       input: {
         columns: [
           { column: 'col1', method: 'COUNT', type: 'aggregate_function' },
-          { column: 'col2', method: 'SUM', type: 'aggregate_function' },
+          { column: 'col2', method: 'SUM', type: 'aggregate_function', alias: 'total' },
           { column: 'col3', method: 'AVG', type: 'aggregate_function' },
           { column: 'col4', method: 'MIN', type: 'aggregate_function' },
           { column: 'col5', method: 'MAX', type: 'aggregate_function' }
@@ -79,11 +79,11 @@ describe('Select AST', () => {
         type: 'select'
       },
       output: {
-        col1: 'col1',
-        col2: 'col2',
-        col3: 'col3',
-        col4: 'col4',
-        col5: 'col5'
+        col1: 'COUNT(col1)',
+        col2: 'total',
+        col3: 'AVG(col3)',
+        col4: 'MIN(col4)',
+        col5: 'MAX(col5)'
       }
     }
   ];
@@ -97,4 +97,38 @@ describe('Select AST', () => {
       expect(jsc).toEqual(testCase.output);
     });
   });
+
+  // Define some test cases with input and expected output for the aggregators method
+  const aggregatorsTestCases = [
+    {
+      input: {
+        columns: [
+          { column: 'col1', method: 'COUNT', type: 'aggregate_function' },
+          { column: 'col2', method: 'SUM', type: 'aggregate_function' },
+          { column: 'col3', method: 'AVG', type: 'aggregate_function' },
+          { column: 'col4', method: 'MIN', type: 'aggregate_function' },
+          { column: 'col5', method: 'MAX', type: 'aggregate_function' }
+        ],
+        type: 'select'
+      },
+      output: {
+        col1: 'COUNT',
+        col2: 'SUM',
+        col3: 'AVG',
+        col4: 'MIN',
+        col5: 'MAX'
+      }
+    }
+  ];
+
+  // Write a test for each test case using the test() function
+  aggregatorsTestCases.forEach(testCase => {
+    test(`aggregators '${testCase.input}'`, () => {
+      // Call the aggregators method with the input
+      const jsc = selectAST.aggregators(testCase.input);
+      // Expect the jsc to match the output
+      expect(jsc).toEqual(testCase.output);
+    });
+  });
+
 });
