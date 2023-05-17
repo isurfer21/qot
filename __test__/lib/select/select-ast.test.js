@@ -107,7 +107,8 @@ describe('Select AST', () => {
           { column: 'col2', method: 'SUM', type: 'aggregate_function' },
           { column: 'col3', method: 'AVG', type: 'aggregate_function' },
           { column: 'col4', method: 'MIN', type: 'aggregate_function' },
-          { column: 'col5', method: 'MAX', type: 'aggregate_function' }
+          { column: 'col5', method: 'MAX', type: 'aggregate_function' },
+          { column: 'col6', type: 'distinct' }
         ],
         type: 'select'
       },
@@ -116,7 +117,8 @@ describe('Select AST', () => {
         col2: 'SUM',
         col3: 'AVG',
         col4: 'MIN',
-        col5: 'MAX'
+        col5: 'MAX',
+        col6: 'distinct'
       }
     }
   ];

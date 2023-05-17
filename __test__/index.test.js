@@ -92,7 +92,7 @@ describe('Main', () => {
     },
     {
       input: {
-        select: "'First Name', 'Last Name', Count(Sex) as Gender",
+        select: "'First Name', 'Last Name', COUNT(Sex) as Gender",
         where: "Sex='Male'",
         limit: 100
       },
@@ -101,6 +101,25 @@ describe('Main', () => {
           'First Name': 'n/a',
           'Last Name': 'n/a',
           'Gender': 47
+        }
+      ]
+    },
+    {
+      input: {
+        select: "'First Name', 'Last Name', DISTINCT Sex as Gender",
+        where: "",
+        limit: 10
+      },
+      output: [
+        {
+          'First Name': 'Shelby',
+          'Last Name': 'Terrell',
+          'Gender': 'Male'
+        },
+        {
+          'First Name': 'Phillip',
+          'Last Name': 'Summers',
+          'Gender': 'Female'
         }
       ]
     }

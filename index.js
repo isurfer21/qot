@@ -163,12 +163,34 @@ async function main() {
               let max = Math.max(...filteredRows.map(row => row[column]));
               aggregatedRow[column] = max;
               break;
+            case 'distinct':
+              // Create an empty array to store the result
+              let result = [];
+              // Create an empty set to store the seen values of the property
+              let seen = new Set();
+              // Loop through the data array
+              for (let row of filteredRows) {
+                // Get the value of the property for the current object
+                let value = row[column];
+                // Check if the value is already in the seen set
+                if (seen.has(value)) {
+                  // The value is not distinct, skip this object
+                  continue;
+                } else {
+                  // The value is distinct, add it to the seen set and the result array
+                  seen.add(value);
+                  result.push(row);
+                }
+              }
+              // Save the result array
+              finalRows = result;
+              break;
           }
         }
         if (Object.keys(aggregatedRow).length > 0) {
           finalRows = [filteredRows.shift()];
           for (let column in finalRows[0]) {
-            if(Object.keys(aggregates).includes(column)) {
+            if (Object.keys(aggregates).includes(column)) {
               finalRows[0][column] = aggregatedRow[column];
             } else {
               finalRows[0][column] = 'n/a';
