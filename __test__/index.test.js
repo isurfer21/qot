@@ -98,8 +98,8 @@ describe('Main', () => {
       },
       output: [
         {
-          'First Name': 'n/a',
-          'Last Name': 'n/a',
+          'First Name': '-',
+          'Last Name': '-',
           'Gender': 47
         }
       ]

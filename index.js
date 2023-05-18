@@ -137,7 +137,7 @@ async function main() {
 
       let finalRows = filteredRows;
 
-      if (Object.keys(aggregates).length > 0) {
+      if (filteredRows.length > 0 && Object.keys(aggregates).length > 0) {
         let aggregatedRow = {};
         for (let column in aggregates) {
           const aggregateMethod = aggregates[column];
@@ -198,7 +198,7 @@ async function main() {
             if (Object.keys(aggregates).includes(column)) {
               finalRows[0][column] = aggregatedRow[column];
             } else {
-              finalRows[0][column] = 'n/a';
+              finalRows[0][column] = '-';
             }
           }
         }
