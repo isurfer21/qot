@@ -3,6 +3,8 @@
 import { promises as fs } from 'fs';
 import { parse } from 'csv-parse/sync';
 import process from 'node:process';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import minimist from 'minimist';
 import SelectAST from './lib/select/select-ast.js';
 import WhereAST from './lib/where/where-ast.js';
@@ -63,6 +65,9 @@ const argv = minimist(process.argv.slice(2), {
   }
 });
 
+const __filename = fileURLToPath (import.meta.url);
+const __dirname = path.dirname (__filename);
+
 async function main() {
   const verbose = !!argv?.verbose;
   verbose && console.log('Arguments:', argv);
@@ -70,7 +75,7 @@ async function main() {
     console.log(helpMenu);
   } else if (argv.version) {
     try {
-      const pkg = await fs.readFile('package.json', 'utf8');
+      const pkg = await fs.readFile(path.resolve(__dirname, 'package.json'), 'utf8');
       const { version } = JSON.parse(pkg);
       console.log(`QoT version ${version}`);
     } catch (err) {
