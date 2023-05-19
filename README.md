@@ -94,9 +94,9 @@ Usage:
 
 ```
 
-### Tips
+### Important Tips
 
-When defining a query statement, it's important to consider the conditions in the `WHERE` clause. If the column name or cell value contains spaces, you can use one of the following formats on the command line to avoid unintended results.
+When defining a query statement, it's important to consider the conditions in the `--where` clause. If the column name or cell value contains spaces, you can use one of the following formats on the command line to avoid unintended results.
 
 1. When the entire statement is enclosed in single quotes ('), the operands should be contained within back quotes (\`).
 
@@ -121,6 +121,122 @@ e.g., if you want to search for rows where the `Job Title` is `Market Researcher
 ```
 'Job Title' = 'Market Researcher'
 ```
+
+### How to perform a query?
+
+To perform a query on a `.csv` file that contains tabular data, you need to use the `--select` option to specify the columns you want to display and the `--from` option to specify the file name. If you want to apply a condition to filter the query result, you can use the `--where` option. If you want to limit the number of rows in the query result, you can use the `--limit` option. If you want to sort the query result by a certain column, you can use the `--orderby` option and choose either `--asc` or `--desc` to order the result in ascending or descending order.
+
+#### Using `--select` option
+
+Here are few possible examples of `--select` option where _columns_ are defined in various different ways:
+
+- Selecting a single column: 
+
+  `--select "name"`
+
+- Selecting multiple columns: 
+
+  `--select "name, address, phone"`
+
+- Selecting all columns: 
+
+  `--select "'*'"`
+
+- Selecting a column with an alias: 
+
+  `--select "sex AS gender"`
+
+- Selecting a column with a function: 
+
+  `--select "COUNT(name)"`
+
+- Selecting a column with a filter: 
+
+  `--select "DISTINCT lastname"`
+
+- Selecting a column with spaces: 
+
+  `--select "'first name', 'last name'"`
+
+- Selecting a column with special characters: 
+
+  `--select "phone_number, product-type, 'discount %'"`
+
+Note: Selecting a column with a _subquery_, _calculation_ or _case-expression_ is not yet supported.
+
+#### Using `--from` option
+
+The `--from` option is used to specify the name of the `.csv` file that contains the tabular data you want to query. The file name should include the extension `.csv` and should be enclosed in quotes if it contains spaces or special characters. For example:
+
+- To query a file named `customers.csv`: 
+
+  `--from customers.csv`
+
+- To query a file named `sales report.csv`: 
+
+  `--from "sales report.csv"`
+
+- To query a file named `data_2021-10-31.csv`: 
+
+  `--from data_2021-10-31.csv`
+
+#### Using `--where` option
+
+The `--where` option is used to apply a condition to filter the query result. The condition should be a logical expression that evaluates to true or false for each row in the table. You can use comparison operators, logical operators, and parentheses to construct complex conditions. For example, to query only the rows 
+
+- Where the name column is 'John': 
+
+  `--where "name = 'John'"`
+
+- Where the age column is less than 18: 
+
+  `--where "age < 18"`
+
+- Where the country column is either 'USA' or 'Canada': 
+
+  `--where "country IN ('USA', 'Canada')"`
+
+- Where the price column is between 10 and 20: 
+
+  `--where "price BETWEEN 10 AND 20"`
+
+- Where the name column starts with 'A': 
+
+  `--where "name LIKE 'A%'"`
+
+- Where the name column is not null: 
+
+  `--where "name IS NOT NULL"`
+
+- Where both the name and age columns match a condition: 
+
+  `--where "name = 'John' AND age > 25"`
+
+- Where either the name or age columns match a condition: 
+
+  `--where "name = 'John' OR age > 25"`
+
+- Where the name column matches one condition and the age column matches another condition:    
+
+  `--where "(name = 'John' OR name = 'Jane') AND (age > 25 OR age < 18)"`
+
+#### Using `--orderby` option with `--asc` & `--desc`
+
+The `--orderby` option is used to sort the query result by a certain column. You can specify the column name after the option and use either `--asc` or `--desc` to order the result in ascending or descending order. If you do not specify the order, the default is ascending. For example:
+
+- To sort the query result by the name column in ascending order: 
+
+  `--orderby name --asc`
+
+- To sort the query result by the age column in descending order: 
+
+  `--orderby age --desc`
+
+- To sort the query result by the country column in ascending order: 
+
+  `--orderby country`
+
+Note: Sorting the query result by multiple columns is not yet supported.
 
 ## Contributing
 
