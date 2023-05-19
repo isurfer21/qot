@@ -122,11 +122,11 @@ e.g., if you want to search for rows where the `Job Title` is `Market Researcher
 'Job Title' = 'Market Researcher'
 ```
 
-### How to perform a query?
+## How to perform a query?
 
 To perform a query on a `.csv` file that contains tabular data, you need to use the `--select` option to specify the columns you want to display and the `--from` option to specify the file name. If you want to apply a condition to filter the query result, you can use the `--where` option. If you want to limit the number of rows in the query result, you can use the `--limit` option. If you want to sort the query result by a certain column, you can use the `--orderby` option and choose either `--asc` or `--desc` to order the result in ascending or descending order.
 
-#### Using `--select` option
+### Using `--select` option
 
 Here are few possible examples of `--select` option where _columns_ are defined in various different ways:
 
@@ -180,7 +180,7 @@ Here are few possible examples of `--select` option where _columns_ are defined 
 
 Note: Selecting a column with a _subquery_, _calculation_ or _case-expression_ is not yet supported.
 
-#### Using `--from` option
+### Using `--from` option
 
 The `--from` option is used to specify the name of the `.csv` file that contains the tabular data you want to query. The file name should include the extension `.csv` and should be enclosed in quotes if it contains spaces or special characters. For example:
 
@@ -202,7 +202,7 @@ The `--from` option is used to specify the name of the `.csv` file that contains
 --from data_2021-10-31.csv`
 ```
 
-#### Using `--where` option
+### Using `--where` option
 
 The `--where` option is used to apply a condition to filter the query result. The condition should be a logical expression that evaluates to true or false for each row in the table. You can use comparison operators, logical operators, and parentheses to construct complex conditions. For example, to query only the rows 
 
@@ -260,7 +260,7 @@ The `--where` option is used to apply a condition to filter the query result. Th
 --where "(name = 'John' OR name = 'Jane') AND (age > 25 OR age < 18)"`
 ```
 
-#### Using `--orderby` option with `--asc` & `--desc`
+### Using `--orderby` option with `--asc` & `--desc`
 
 The `--orderby` option is used to sort the query result by a certain column. You can specify the column name after the option and use either `--asc` or `--desc` to order the result in ascending or descending order. If you do not specify the order, the default is ascending. For example:
 
