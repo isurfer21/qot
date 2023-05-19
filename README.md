@@ -132,35 +132,51 @@ Here are few possible examples of `--select` option where _columns_ are defined 
 
 - Selecting a single column: 
 
-  `--select "name"`
+```
+--select "name"`
+```
 
 - Selecting multiple columns: 
 
-  `--select "name, address, phone"`
+```
+--select "name, address, phone"`
+```
 
 - Selecting all columns: 
 
-  `--select "'*'"`
+```
+--select "'*'"`
+```
 
 - Selecting a column with an alias: 
 
-  `--select "sex AS gender"`
+```
+--select "sex AS gender"`
+```
 
 - Selecting a column with a function: 
 
-  `--select "COUNT(name)"`
+```
+--select "COUNT(name)"`
+```
 
 - Selecting a column with a filter: 
 
-  `--select "DISTINCT lastname"`
+```
+--select "DISTINCT lastname"`
+```
 
 - Selecting a column with spaces: 
 
-  `--select "'first name', 'last name'"`
+```
+--select "'first name', 'last name'"`
+```
 
 - Selecting a column with special characters: 
 
-  `--select "phone_number, product-type, 'discount %'"`
+```
+--select "phone_number, product-type, 'discount %'"`
+```
 
 Note: Selecting a column with a _subquery_, _calculation_ or _case-expression_ is not yet supported.
 
@@ -170,15 +186,21 @@ The `--from` option is used to specify the name of the `.csv` file that contains
 
 - To query a file named `customers.csv`: 
 
-  `--from customers.csv`
+```
+--from customers.csv`
+```
 
 - To query a file named `sales report.csv`: 
 
-  `--from "sales report.csv"`
+```
+--from "sales report.csv"`
+```
 
 - To query a file named `data_2021-10-31.csv`: 
 
-  `--from data_2021-10-31.csv`
+```
+--from data_2021-10-31.csv`
+```
 
 #### Using `--where` option
 
@@ -186,39 +208,57 @@ The `--where` option is used to apply a condition to filter the query result. Th
 
 - Where the name column is 'John': 
 
-  `--where "name = 'John'"`
+```
+--where "name = 'John'"`
+```
 
 - Where the age column is less than 18: 
 
-  `--where "age < 18"`
+```
+--where "age < 18"`
+```
 
 - Where the country column is either 'USA' or 'Canada': 
 
-  `--where "country IN ('USA', 'Canada')"`
+```
+--where "country IN ('USA', 'Canada')"`
+```
 
 - Where the price column is between 10 and 20: 
 
-  `--where "price BETWEEN 10 AND 20"`
+```
+--where "price BETWEEN 10 AND 20"`
+```
 
 - Where the name column starts with 'A': 
 
-  `--where "name LIKE 'A%'"`
+```
+--where "name LIKE 'A%'"`
+```
 
 - Where the name column is not null: 
 
-  `--where "name IS NOT NULL"`
+```
+--where "name IS NOT NULL"`
+```
 
 - Where both the name and age columns match a condition: 
 
-  `--where "name = 'John' AND age > 25"`
+```
+--where "name = 'John' AND age > 25"`
+```
 
 - Where either the name or age columns match a condition: 
 
-  `--where "name = 'John' OR age > 25"`
+```
+--where "name = 'John' OR age > 25"`
+```
 
 - Where the name column matches one condition and the age column matches another condition:    
 
-  `--where "(name = 'John' OR name = 'Jane') AND (age > 25 OR age < 18)"`
+```
+--where "(name = 'John' OR name = 'Jane') AND (age > 25 OR age < 18)"`
+```
 
 #### Using `--orderby` option with `--asc` & `--desc`
 
@@ -226,15 +266,21 @@ The `--orderby` option is used to sort the query result by a certain column. You
 
 - To sort the query result by the name column in ascending order: 
 
-  `--orderby name --asc`
+```
+--orderby name --asc`
+```
 
 - To sort the query result by the age column in descending order: 
 
-  `--orderby age --desc`
+```
+--orderby age --desc`
+```
 
 - To sort the query result by the country column in ascending order: 
 
-  `--orderby country`
+```
+--orderby country`
+```
 
 Note: Sorting the query result by multiple columns is not yet supported.
 
