@@ -17,7 +17,7 @@ This program uses the `csv-parse` and `minimist` modules to parse CSV data and c
 You can run this program from the command line by passing the appropriate arguments. For example:
 
 ```
-node qot.js --select firstname,lastname,mobile,email --from sample.csv --where age<30 --limit 10 --orderby age --desc
+qot --select firstname,lastname,mobile,email --from sample.csv --where age<30 --limit 10 --orderby age --desc
 ```
 
 This command will select the `firstname`, `lastname`, `mobile`, and `email` columns from the `sample.csv` file where the `age` is less than `30`. The results will be sorted by `age` in descending order and only the first `10` rows will be displayed.
