@@ -6,9 +6,11 @@ import process from 'node:process';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import minimist from 'minimist';
-import SelectAST from './lib/select/select-ast.js';
 import WhereAST from './lib/where/where-ast.js';
+import SelectClause from './lib/select/select-clause.js';
 import Tabulator from './lib/tabulator.js';
+import Aggregator from './lib/aggregator.js';
+import Filter from './lib/filter.js';
 
 const helpMenu = `QoT - Query over Table
 
@@ -85,10 +87,10 @@ async function main() {
   } else {
     // Handle the other arguments and perform the query over table operation.
     if (argv.select && argv.from) {
-      let rows;
+      let allRows;
       try {
         const file = await fs.readFile(argv.from);
-        rows = parse(file, { columns: true });
+        allRows = parse(file, { columns: true });
       } catch (err) {
         console.error(err.message);
         process.exit(1);
@@ -101,18 +103,11 @@ async function main() {
       const asc = argv.asc;
       const desc = argv.desc;
 
-      let filteredRows = rows,
-        columns = [],
-        aggregates = [];
+      let filteredRows, selectClause;
 
       if (select) {
-        const selectAST = new SelectAST(verbose);
-        const ast = selectAST.generateAst(select);
-        const columnIds = Object.keys(rows[0]);
-        columns = selectAST.toColumns(ast, columnIds);
-        verbose && console.log('Select Columns:', columns);
-        aggregates = selectAST.aggregators(ast);
-        verbose && console.log('Select Aggregates:', aggregates);
+        selectClause = new SelectClause(verbose, allRows);
+        selectClause.process(select);
       }
 
       if (where) {
@@ -121,6 +116,17 @@ async function main() {
         const expr = whereAST.toJavaScript(ast);
         verbose && console.log('Where Expression:', expr);
         filteredRows = filteredRows.filter(row => eval(expr));
+      // The `DISTINCT` clause is used to remove duplicate rows from the result set.
+      if (filteredRows.length > 0 && Object.keys(selectClause.filters).length > 0) {
+        const filter = new Filter(verbose);
+        filteredRows = filter.distinctRows(selectClause.filters, filteredRows);
+        // console.log('On distinct:', filteredRows);
+      }
+
+      // The aggregate functions are applied over the result set.
+      if (filteredRows.length > 0 && Object.keys(selectClause.aggregates).length > 0) {
+        const aggregator = new Aggregator(verbose);
+        filteredRows = aggregator.aggregateRow(selectClause.aggregates, filteredRows);
       }
 
       if (orderby) {
@@ -135,81 +141,12 @@ async function main() {
         filteredRows = filteredRows.slice(0, limit);
       }
 
-      let finalRows = filteredRows;
-
-      if (filteredRows.length > 0 && Object.keys(aggregates).length > 0) {
-        let aggregatedRow = {};
-        for (let column in aggregates) {
-          const aggregateMethod = aggregates[column];
-          // Assuming the array of rows is called filteredRows where each row consist column-values as KV pairs
-          switch (aggregateMethod) {
-            case 'COUNT':
-              // Calculate the number of rows that have a value for the column
-              let count = filteredRows.filter(row => row[column] != null).length;
-              aggregatedRow[column] = count;
-              break;
-            case 'SUM':
-              // Calculate the sum of the values of the column for all rows
-              let sum = filteredRows.reduce((acc, row) => acc + row[column], 0);
-              aggregatedRow[column] = sum;
-              break;
-            case 'AVG':
-              // Calculate the average of the values of the column for all rows
-              let avg = filteredRows.reduce((acc, row) => acc + row[column], 0) / filteredRows.length;
-              aggregatedRow[column] = avg;
-              break;
-            case 'MIN':
-              // Calculate the minimum value of the column for all rows
-              let min = Math.min(...filteredRows.map(row => row[column]));
-              aggregatedRow[column] = min;
-              break;
-            case 'MAX':
-              // Calculate the maximum value of the column for all rows
-              let max = Math.max(...filteredRows.map(row => row[column]));
-              aggregatedRow[column] = max;
-              break;
-            case 'distinct':
-              // Create an empty array to store the result
-              let result = [];
-              // Create an empty set to store the seen values of the property
-              let seen = new Set();
-              // Loop through the data array
-              for (let row of filteredRows) {
-                // Get the value of the property for the current object
-                let value = row[column];
-                // Check if the value is already in the seen set
-                if (seen.has(value)) {
-                  // The value is not distinct, skip this object
-                  continue;
-                } else {
-                  // The value is distinct, add it to the seen set and the result array
-                  seen.add(value);
-                  result.push(row);
-                }
-              }
-              // Save the result array
-              finalRows = result;
-              break;
-          }
-        }
-        if (Object.keys(aggregatedRow).length > 0) {
-          finalRows = [filteredRows.shift()];
-          for (let column in finalRows[0]) {
-            if (Object.keys(aggregates).includes(column)) {
-              finalRows[0][column] = aggregatedRow[column];
-            } else {
-              finalRows[0][column] = '-';
-            }
-          }
-        }
-      }
-
       if (argv.json) {
-        Tabulator.printAsJSON(columns, finalRows);
+        Tabulator.printAsJSON(selectClause.columns, filteredRows);
       } else if (argv.yaml) {
-        Tabulator.printAsYAML(columns, finalRows);
+        Tabulator.printAsYAML(selectClause.columns, filteredRows);
       } else {
-        let tabulatedData = Tabulator.toTable(columns, finalRows);
+        let tabulatedData = Tabulator.toTable(selectClause.columns, filteredRows);
         if (argv.csv) {
           Tabulator.printAsCSV(tabulatedData);
         } else if (argv.tsv) {
