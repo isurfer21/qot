@@ -6,8 +6,8 @@ import process from 'node:process';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import minimist from 'minimist';
-import WhereAST from './lib/where/where-ast.js';
 import SelectClause from './lib/select/select-clause.js';
+import WhereClause from './lib/where/where-clause.js';
 import Tabulator from './lib/tabulator.js';
 import Aggregator from './lib/aggregator.js';
 import Filter from './lib/filter.js';
@@ -110,12 +110,15 @@ async function main() {
         selectClause.process(select);
       }
 
+      // The `WHERE` clause is used to filter rows based on a condition.
       if (where) {
-        const whereAST = new WhereAST(verbose);
-        const ast = whereAST.generateAst(where);
-        const expr = whereAST.toJavaScript(ast);
-        verbose && console.log('Where Expression:', expr);
-        filteredRows = filteredRows.filter(row => eval(expr));
+        const whereClause = new WhereClause(verbose, allRows);
+        whereClause.process(where);
+        filteredRows = whereClause.filteredRows;
+      } else {
+        filteredRows = allRows;
+      }
+
       // The `DISTINCT` clause is used to remove duplicate rows from the result set.
       if (filteredRows.length > 0 && Object.keys(selectClause.filters).length > 0) {
         const filter = new Filter(verbose);
