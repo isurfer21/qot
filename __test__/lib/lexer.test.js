@@ -84,13 +84,29 @@ describe('Select Lexer', () => {
 
   test('isSpecialChar returns true for specialchar characters', () => {
     expect(Lexer.isSpecialChar('_')).toBe(true);
-    expect(Lexer.isSpecialChar('-')).toBe(true);
-    expect(Lexer.isSpecialChar('%')).toBe(true);
+    expect(Lexer.isSpecialChar('@')).toBe(true);
+    expect(Lexer.isSpecialChar('#')).toBe(true);
+    expect(Lexer.isSpecialChar('$')).toBe(true);
   });
 
   test('isSpecialChar returns false for non-specialchar characters', () => {
     expect(Lexer.isSpecialChar('a')).toBe(false);
     expect(Lexer.isSpecialChar('1')).toBe(false);
     expect(Lexer.isSpecialChar('*')).toBe(false);
+    expect(Lexer.isSpecialChar('%')).toBe(false);
+    expect(Lexer.isSpecialChar('-')).toBe(false);
   });
+
+  test('isWildcardChar returns true for wildcard characters', () => {
+    expect(Lexer.isWildcardChar('%')).toBe(true);
+    expect(Lexer.isWildcardChar('*')).toBe(true);
+  });
+
+  test('isWildcardChar returns false for non-wildcard characters', () => {
+    expect(Lexer.isWildcardChar('a')).toBe(false);
+    expect(Lexer.isWildcardChar('1')).toBe(false);
+    expect(Lexer.isWildcardChar('#')).toBe(false);
+    expect(Lexer.isWildcardChar('$')).toBe(false);
+  });
+
 });

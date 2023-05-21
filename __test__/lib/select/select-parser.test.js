@@ -15,10 +15,8 @@ describe('Select Parser', () => {
   });
 
   test('parser returns an array of tokens for a valid expression with asterisk', () => {
-    const expression = [
-      { type: 'asterisk', value: '*' }
-    ];
-    const expectedTokens = { columns: [], type: 'select' };
+    const expression = [{ type: 'asterisk', value: '*' }];
+    const expectedTokens = { columns: [{ column: '*', type: 'column' }], type: 'select' };
     expect(parser.parse(expression)).toEqual(expectedTokens);
   });
 

@@ -48,13 +48,15 @@ describe('Select Lexer', () => {
   });
 
   test('tokenize expression of columns having special characters', () => {
-    const expression = 'col_1, col-2, col3%';
+    const expression = 'col_1, col#2, col@3, col$4';
     const expectedTokens = [
       { type: 'identifier', value: 'col_1' },
       { type: 'comma', value: ',' },
-      { type: 'identifier', value: 'col-2' },
+      { type: 'identifier', value: 'col#2' },
       { type: 'comma', value: ',' },
-      { type: 'identifier', value: 'col3%' }
+      { type: 'identifier', value: 'col@3' },
+      { type: 'comma', value: ',' },
+      { type: 'identifier', value: 'col$4' }
     ];
     expect(lexer.tokenize(expression)).toEqual(expectedTokens);
   });

@@ -117,8 +117,7 @@ describe('Select AST', () => {
         col2: 'SUM',
         col3: 'AVG',
         col4: 'MIN',
-        col5: 'MAX',
-        col6: 'distinct'
+        col5: 'MAX'
       }
     }
   ];
@@ -130,6 +129,36 @@ describe('Select AST', () => {
       const jsc = selectAST.aggregators(testCase.input);
       // Expect the jsc to match the output
       expect(jsc).toEqual(testCase.output);
+    });
+  });
+
+  // Define some test cases with input and expected output for the filters method
+  const filtersTestCases = [
+    {
+      input: {
+        columns: [
+          { column: 'col1', method: 'COUNT', type: 'aggregate_function' },
+          { column: 'col2', method: 'SUM', type: 'aggregate_function' },
+          { column: 'col3', method: 'AVG', type: 'aggregate_function' },
+          { column: 'col4', method: 'MIN', type: 'aggregate_function' },
+          { column: 'col5', method: 'MAX', type: 'aggregate_function' },
+          { column: 'col6', type: 'distinct' }
+        ],
+        type: 'select'
+      },
+      output: {
+        col6: 'distinct'
+      }
+    }
+  ];
+
+  // Write a test for each test case using the test() function
+  filtersTestCases.forEach(testCase => {
+    test(`filters '${testCase.input}'`, () => {
+      // Call the filters method with the input
+      const jsf = selectAST.filters(testCase.input);
+      // Expect the jsc to match the output
+      expect(jsf).toEqual(testCase.output);
     });
   });
 

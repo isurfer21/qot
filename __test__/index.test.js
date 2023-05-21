@@ -25,6 +25,7 @@ describe('Main', () => {
     {
       input: {
         select: "'First Name', 'Last Name', Sex as Gender",
+        from: 'people.csv',
         where: "'Job Title'='Market researcher'",
         limit: 1
       },
@@ -39,6 +40,7 @@ describe('Main', () => {
     {
       input: {
         select: '*',
+        from: 'people.csv',
         where: '`First Name`="Mario"',
         limit: 1
       },
@@ -59,6 +61,7 @@ describe('Main', () => {
     {
       input: {
         select: "'First Name', 'Last Name', Sex as Gender",
+        from: 'people.csv',
         where: "Sex='Male' and 'First Name' not in ('Lori', 'Shelby', 'Erin')",
         limit: 5
       },
@@ -93,6 +96,7 @@ describe('Main', () => {
     {
       input: {
         select: "'First Name', 'Last Name', COUNT(Sex) as Gender",
+        from: 'people.csv',
         where: "Sex='Male'",
         limit: 100
       },
@@ -107,7 +111,8 @@ describe('Main', () => {
     {
       input: {
         select: "'First Name', 'Last Name', DISTINCT Sex as Gender",
-        where: "",
+        from: 'people.csv',
+        where: '',
         limit: 10
       },
       output: [
@@ -122,15 +127,74 @@ describe('Main', () => {
           'Gender': 'Female'
         }
       ]
+    },
+    {
+      input: {
+        select: "Period, Mothers_Age, sum('Count')",
+        from: 'births-by-mothers-age.csv',
+        where: "Mothers_Age='Under 15'",
+        limit: 10
+      },
+      output: [
+        {
+          'Period': '-',
+          'Mothers_Age': '-',
+          'SUM(Count)': 441
+        }
+      ]
+    },
+    {
+      input: {
+        select: "Period, Mothers_Age, max('Count')",
+        from: 'births-by-mothers-age.csv',
+        where: "Mothers_Age='Under 15'",
+        limit: 10
+      },
+      output: [
+        {
+          'Period': '-',
+          'Mothers_Age': '-',
+          'MAX(Count)': 51
+        }
+      ]
+    },
+    {
+      input: {
+        select: "Period, Mothers_Age, 'Count'",
+        from: 'births-by-mothers-age.csv',
+        where: "Mothers_Age='Under 15' and Count > 30",
+        limit: 10
+      },
+      output: [
+        {
+          Period: '2005',
+          Mothers_Age: 'Under 15',
+          Count: '36'
+        },
+        {
+          Period: '2006',
+          Mothers_Age: 'Under 15',
+          Count: '36'
+        },
+        {
+          Period: '2007',
+          Mothers_Age: 'Under 15',
+          Count: '51'
+        },
+        {
+          Period: '2008',
+          Mothers_Age: 'Under 15',
+          Count: '39'
+        }
+      ]
     }
   ];
 
-  // Set the filepath of sample data in '.csv' format
-  const fromCsv = path.join('__test__', 'data', 'people.csv');
-
   // Write a test for each test case using the test() function
   testCases.forEach(testCase => {
-    test(`Query spreadsheet "SELECT ${testCase.input.select} WHERE ${testCase.input.where}"`, async () => {
+    test(`Query spreadsheet "SELECT ${testCase.input.select} FROM ${testCase.input.from} WHERE ${testCase.input.where}"`, async () => {
+      // Set the filepath of sample data in '.csv' format
+      const fromCsv = path.join('__test__', 'data', testCase.input.from);
       // Run a command in a shell using exec
       const { stdout, stderr } = await $(
         `node index.js --select "${testCase.input.select}" --from "${fromCsv}" --where "${testCase.input.where}" --limit ${testCase.input.limit} --json`
