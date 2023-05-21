@@ -67,8 +67,8 @@ const argv = minimist(process.argv.slice(2), {
   }
 });
 
-const __filename = fileURLToPath (import.meta.url);
-const __dirname = path.dirname (__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function main() {
   const verbose = !!argv?.verbose;
