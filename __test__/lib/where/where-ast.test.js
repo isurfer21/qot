@@ -1,9 +1,18 @@
-import { describe, expect, test } from '@jest/globals';
+import { jest, describe, expect, test } from '@jest/globals';
 import WhereAST from '../../../lib/where/where-ast';
 
 describe('Where AST', () => {
   // Create a new instance of WhereAST
   const whereAST = new WhereAST();
+  
+  test('process should exit with an warning if the where condition is empty', () => {
+    // Mock the console.warn methods
+    console.warn = jest.fn();
+    // Pass empty expression
+    whereAST.generateAst('');
+    // Expect the console.error to be called with the invalid columns
+    expect(console.warn).toHaveBeenCalledWith("Error: Missing or invalid WHERE expression!");
+  });
 
   // Define some test cases with input and expected output for the generateAst method
   const generateAstTestCases = [
@@ -143,5 +152,4 @@ describe('Where AST', () => {
       expect(jsc).toEqual(testCase.output);
     });
   });
-
 });

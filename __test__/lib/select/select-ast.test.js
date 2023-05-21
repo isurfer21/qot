@@ -1,9 +1,18 @@
-import { describe, expect, test } from '@jest/globals';
+import { jest, describe, expect, test } from '@jest/globals';
 import SelectAST from '../../../lib/select/select-ast';
 
 describe('Select AST', () => {
   // Create a new instance of SelectAST
   const selectAST = new SelectAST();
+  
+  test('process should exit with an warning if the select clause is empty', () => {
+    // Mock the console.warn methods
+    console.warn = jest.fn();
+    // Pass empty expression
+    selectAST.generateAst('');
+    // Expect the console.error to be called with the invalid columns
+    expect(console.warn).toHaveBeenCalledWith("Error: Missing or invalid SELECT expression!");
+  });
 
   // Define some test cases with input and expected output for the generateAst method
   const generateAstTestCases = [
