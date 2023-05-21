@@ -72,7 +72,7 @@ const __dirname = path.dirname (__filename);
 
 async function main() {
   const verbose = !!argv?.verbose;
-  verbose && console.log('Arguments:', argv);
+  verbose && console.info('Arguments:', argv);
   if (argv.help) {
     console.log(helpMenu);
   } else if (argv.version) {
