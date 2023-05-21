@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import Lexer from '../../lib/lexer';
 
-describe('Select Lexer', () => {
+describe('Lexer', () => {
   test('isAlphaNumeric returns true for alphanumeric characters', () => {
     expect(Lexer.isAlphaNumeric('a')).toBe(true);
     expect(Lexer.isAlphaNumeric('Z')).toBe(true);
