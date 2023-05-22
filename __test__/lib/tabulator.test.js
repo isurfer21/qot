@@ -219,10 +219,11 @@ describe('Tabulator', () => {
     let tabulatedData = sampleTabulatedData;
 
     // Act
-    let result = Tabulator.printAsMarkdown(tabulatedData);
+    Tabulator.printAsMarkdown(tabulatedData);
 
     // Assert
-    expect(result).toBe('|ID|Name   |Age|\n|--|-------|---|\n|1 |Alice  |25 |\n|2 |Bob    |30 |\n|3 |Charlie|35 |\n');
+    expect(console.log).toHaveBeenCalledTimes(1); // One call for the whole table
+    expect(console.log).toHaveBeenCalledWith('|ID|Name   |Age|\n|--|-------|---|\n|1 |Alice  |25 |\n|2 |Bob    |30 |\n|3 |Charlie|35 |\n');
   });
 
   test('printAsTable prints tabulated data as a formatted table', () => {
