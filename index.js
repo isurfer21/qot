@@ -11,6 +11,7 @@ import WhereClause from './lib/where/where-clause.js';
 import Tabulator from './lib/tabulator.js';
 import Aggregator from './lib/aggregator.js';
 import Filter from './lib/filter.js';
+import OrderBy from './lib/orderby.js';
 import Utility from './lib/utility.js';
 
 const helpMenu = `QoT - Query over Table
@@ -110,6 +111,7 @@ async function main() {
 
       let filteredRows, selectClause;
 
+      // The `SELECT` clause is used to display selected columns.
       if (select) {
         selectClause = new SelectClause(verbose, allRows);
         selectClause.process(select);
@@ -137,14 +139,13 @@ async function main() {
         filteredRows = aggregator.aggregateRow(selectClause.aggregates, filteredRows);
       }
 
+      // The `ORDER BY` clause is used to sort the data based on one or more columns.
       if (orderby) {
-        filteredRows.sort((a, b) => {
-          if (a[orderby] < b[orderby]) return asc ? -1 : 1;
-          if (a[orderby] > b[orderby]) return asc ? 1 : -1;
-          return 0;
-        });
+        let orderBy = new OrderBy(verbose);
+        filteredRows = orderBy.process(filteredRows, orderby, asc, desc);
       }
 
+      // The `LIMIT` clause is used to limit the number of rows returned by a query.
       if (limit) {
         filteredRows = filteredRows.slice(0, limit);
       }
