@@ -89,7 +89,7 @@ async function main() {
     if (argv.select && argv.from) {
       let allRows;
       try {
-        const file = await fs.readFile(argv.from);
+        const file = await fs.readFile(path.resolve(process.cwd(), argv.from));
         allRows = parse(file, { columns: true });
       } catch (err) {
         console.error(err.message);
