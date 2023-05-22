@@ -81,10 +81,12 @@ Options:
      --csv                  Print in CSV format
      --tsv                  Print in TSV format
      --psv                  Print in PSV format
-     --htm                  Print in HTM format
-     --html                 Print in HTML format
+     --htm                  Print in HTM table format
+     --html                 Print in HTML table format
      --json                 Print in JSON format
      --yaml                 Print in YAML format
+     --ascii                Print in ASCII table format
+     --md                   Print in Markdown table format
 
 Usage:
   qot --select * --from 'sample.csv'

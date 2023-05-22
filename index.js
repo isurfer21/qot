@@ -43,10 +43,12 @@ Options:
      --csv                  Print in CSV format
      --tsv                  Print in TSV format
      --psv                  Print in PSV format
-     --htm                  Print in HTM format
-     --html                 Print in HTML format
+     --htm                  Print in HTM table format
+     --html                 Print in HTML table format
      --json                 Print in JSON format
      --yaml                 Print in YAML format
+     --ascii                Print in ASCII table format
+     --md                   Print in Markdown table format
 
 Usage:
   qot --select * --from 'sample.csv'
@@ -154,6 +156,8 @@ async function main() {
         Tabulator.printAsJSON(selectClause.columns, filteredRows);
       } else if (argv.yaml) {
         Tabulator.printAsYAML(selectClause.columns, filteredRows);
+      } else if (argv.ascii) {
+        Tabulator.printAsASCII(selectClause.columns, filteredRows);
       } else {
         let tabulatedData = Tabulator.toTable(selectClause.columns, filteredRows);
         if (argv.csv) {
@@ -166,6 +170,8 @@ async function main() {
           Tabulator.printAsHTM(tabulatedData);
         } else if (argv.html) {
           Tabulator.printAsHTML(tabulatedData);
+        } else if (argv.md) {
+          Tabulator.printAsMarkdown(tabulatedData);
         } else {
           Tabulator.printAsTable(tabulatedData);
         }

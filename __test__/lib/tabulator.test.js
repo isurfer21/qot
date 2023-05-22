@@ -30,12 +30,18 @@ describe('Tabulator', () => {
     originalLog = console.log;
     // Replace it with a jest mock function
     console.log = jest.fn();
+    // Save the original console.table function
+    originalTable = console.table;
+    // Replace it with a jest mock function
+    console.table = jest.fn();
   });
 
   // Use afterEach to restore console.log after each test
   afterEach(() => {
     // Restore the original console.log function
     console.log = originalLog;
+    // Restore the original console.table function
+    console.table = originalTable;
   });
 
   test('toTable converts columns and rows into a 2D array', () => {
@@ -64,11 +70,15 @@ describe('Tabulator', () => {
     // Assert
     expect(console.log).toHaveBeenCalledTimes(1); // One call for the whole array
     expect(console.log).toHaveBeenCalledWith(
-      JSON.stringify([
-        { ID: 1, Name: 'Alice', Age: 25 },
-        { ID: 2, Name: 'Bob', Age: 30 },
-        { ID: 3, Name: 'Charlie', Age: 35 }
-      ], null, 2)
+      JSON.stringify(
+        [
+          { ID: 1, Name: 'Alice', Age: 25 },
+          { ID: 2, Name: 'Bob', Age: 30 },
+          { ID: 3, Name: 'Charlie', Age: 35 }
+        ],
+        null,
+        2
+      )
     ); // The expected JSON output
   });
 
@@ -88,6 +98,22 @@ describe('Tabulator', () => {
         { ID: 3, Name: 'Charlie', Age: 35 }
       ])
     ); // The expected YAML output
+  });
+
+  test('printAsASCII prints rows as an array of objects in ASCII format', () => {
+    // Arrange
+    const { columns, rows } = sampleColumnsAndRows;
+
+    // Act
+    Tabulator.printAsASCII(columns, rows);
+
+    // Assert
+    expect(console.table).toHaveBeenCalledTimes(1); // One call for the whole array
+    expect(console.table).toHaveBeenCalledWith([
+      { ID: 1, Name: 'Alice', Age: 25 },
+      { ID: 2, Name: 'Bob', Age: 30 },
+      { ID: 3, Name: 'Charlie', Age: 35 }
+    ]); // The expected ASCII output
   });
 
   test('printAsCSV prints tabulated data as comma-separated values', () => {
@@ -186,6 +212,17 @@ describe('Tabulator', () => {
   </tbody>
 </table>`
     ); // The expected HTML output
+  });
+
+  test('printAsMarkdown prints tabulated data as a markdown table', () => {
+    // Arrange
+    let tabulatedData = sampleTabulatedData;
+
+    // Act
+    let result = Tabulator.printAsMarkdown(tabulatedData);
+
+    // Assert
+    expect(result).toBe('|ID|Name   |Age|\n|--|-------|---|\n|1 |Alice  |25 |\n|2 |Bob    |30 |\n|3 |Charlie|35 |\n');
   });
 
   test('printAsTable prints tabulated data as a formatted table', () => {
