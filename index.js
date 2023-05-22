@@ -11,6 +11,7 @@ import WhereClause from './lib/where/where-clause.js';
 import Tabulator from './lib/tabulator.js';
 import Aggregator from './lib/aggregator.js';
 import Filter from './lib/filter.js';
+import Utility from './lib/utility.js';
 
 const helpMenu = `QoT - Query over Table
 
@@ -88,8 +89,12 @@ async function main() {
     // Handle the other arguments and perform the query over table operation.
     if (argv.select && argv.from) {
       let allRows;
+
+      // The `FROM` clause is used to specify the source of the data.
       try {
-        const file = await fs.readFile(path.resolve(process.cwd(), argv.from));
+        let from = argv.from;
+        from = Utility.dualDotToSpace(from);
+        const file = await fs.readFile(path.resolve(process.cwd(), from));
         allRows = parse(file, { columns: true });
       } catch (err) {
         console.error(err.message);

@@ -122,6 +122,38 @@ e.g., if you want to search for rows where the `Job Title` is `Market Researcher
 'Job Title' = 'Market Researcher'
 ```
 
+3. Use (..) characters in place of spaces to further avoid any space-related issues, even after enclosing the string with spaces in quotes.
+
+```
+'Column..Name'..=..'Value..as..string'
+```
+
+e.g., if you want to search for rows where the `Job Title` is `Market Researcher`, you can use one of the following queries:
+
+```
+'Job..Title'..=..'Market..Researcher'
+```
+
+## How to use spaces in command line arguments for `qot` tool on Windows?
+
+If the command line arguments contain spaces, we may encounter this issue on Windows with the login `Abhishek Kumar`.
+
+```
+PS D:\> qot --select "sum('Number of employees')" --from ".\organizations.csv" --where "Country=India"
+'C:\Users\Abhishek' is not recognized as an internal or external command,
+operable program or batch file.
+```
+
+The problem is that the command line interpreter is trying to execute `C:\Users\Abhishek` as a separate command, because it sees a space after `Abhishek`. This causes an error because there is no such command. The space is part of the path to the `qot` command, which is a tool that allows you to query data from tables or sheets.
+
+The possible solution is to use double dots (`..`) instead of spaces in the command line arguments that contain spaces. This tells the `qot` tool to treat the double dots as spaces when parsing the arguments. For example, if you want to select the sum of the `Number of employees` column from the `organizations.csv` file where the `Country` column is equal to `India`, you can use the following command:
+
+```cmd
+qot --select "sum('Number..of..employees')" --from ".\organizations.csv" --where "Country..=..India"
+```
+
+This way, the command line interpreter will not split the arguments at spaces, and the `qot` tool will replace the double dots with spaces when processing the query. This will avoid similar kind of path with space error, even after enclosing the string with spaces.
+
 ## How to perform a query?
 
 To perform a query on a `.csv` file that contains tabular data, you need to use the `--select` option to specify the columns you want to display and the `--from` option to specify the file name. If you want to apply a condition to filter the query result, you can use the `--where` option. If you want to limit the number of rows in the query result, you can use the `--limit` option. If you want to sort the query result by a certain column, you can use the `--orderby` option and choose either `--asc` or `--desc` to order the result in ascending or descending order.
