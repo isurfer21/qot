@@ -209,7 +209,7 @@ Here are few possible examples of `--select` option where _columns_ are defined 
 - Selecting a column with special characters: 
 
 ```
---select "phone_number, product-type, 'discount %'"
+--select "phone_number, product#, discount@rate, price$, 'saving%', 'product-type'"
 ```
 
 Note: Selecting a column with a _subquery_, _calculation_ or _case-expression_ is not yet supported.
@@ -268,6 +268,7 @@ The `--where` option is used to apply a condition to filter the query result. Th
 
 ```
 --where "name LIKE 'A%'"
+--where "name LIKE 'A'"
 ```
 
 - Where the name column is not null: 
