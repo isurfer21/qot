@@ -96,7 +96,7 @@ Usage:
 
 ### Important Tips
 
-When defining a query statement, it's important to consider the conditions in the `--where` clause. If the column name or cell value contains spaces, you can use one of the following formats on the command line to avoid unintended results.
+When defining a query statement, it's important to consider the conditions in the `--where` clause and coumn names in `--select` clause. If the column name or cell value contains spaces, you can use one of the following formats on the command line to avoid unintended results.
 
 1. When the entire statement is enclosed in single quotes ('), the operands should be contained within back quotes (\`).
 

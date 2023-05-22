@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import Filter from '../../lib/Filter';
+import Filter from '../../lib/filter';
 
 describe('Filter', () => {
   test('distinctRows should remove duplicate rows based on a column', () => {

@@ -1,5 +1,5 @@
 import { jest, describe, expect, test, beforeEach, afterEach } from '@jest/globals';
-import Tabulator from '../../lib/Tabulator';
+import Tabulator from '../../lib/tabulator';
 import YAML from 'yaml';
 
 // A sample input type #1, which takes an object with columns and rows properties where the columns property is an object that maps column ids to column titles and the rows property is an array of objects that represent the data for each row, with keys matching the column ids.
