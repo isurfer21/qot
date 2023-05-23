@@ -295,6 +295,18 @@ The `--where` option is used to apply a condition to filter the query result. Th
 --where "(name = 'John' OR name = 'Jane') AND (age > 25 OR age < 18)"
 ```
 
+- Where the date_of_birth column matches a condition which contains date:
+
+```
+--where "date_of_birth < '1930-01-01'"
+```
+
+- Where the date_of_birth column matches a condition which contains range of dates:
+
+```
+--where "date_of_birth BETWEEN '1930-01-01' AND '1939-12-31'"
+```
+
 ### Using `--orderby` option with `--asc` & `--desc`
 
 The `--orderby` option is used to sort the query result by a certain column. You can specify the column name after the option and use either `--asc` or `--desc` to order the result in ascending or descending order. If you do not specify the order, the default is ascending. For example:
