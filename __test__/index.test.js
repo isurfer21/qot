@@ -187,6 +187,76 @@ describe('Main', () => {
           Count: '39'
         }
       ]
+    },
+    {
+      input: {
+        select: "'First Name', 'Last Name', 'Date of birth'",
+        from: 'people.csv',
+        where: "'Date of birth' BETWEEN '1930-01-01' AND '1935-12-31'",
+        limit: 5
+      },
+      output: [
+        {
+          'First Name': 'Brittney',
+          'Last Name': 'Vega',
+          'Date of birth': '1932-10-31'
+        },
+        {
+          'First Name': 'Brandon',
+          'Last Name': 'Schmidt',
+          'Date of birth': '1931-05-12'
+        },
+        {
+          'First Name': 'Miguel',
+          'Last Name': 'Hill',
+          'Date of birth': '1930-08-26'
+        },
+        {
+          'First Name': 'Danielle',
+          'Last Name': 'Estrada',
+          'Date of birth': '1930-07-09'
+        },
+        {
+          'First Name': 'Heidi',
+          'Last Name': 'Escobar',
+          'Date of birth': '1931-09-25'
+        }
+      ]
+    },
+    {
+      input: {
+        select: "'First Name', 'Last Name', 'Date of birth'",
+        from: 'people.csv',
+        where: "'Date of birth' < '1930-01-01'",
+        limit: 5
+      },
+      output: [
+        {
+          'First Name': 'Phillip',
+          'Last Name': 'Summers',
+          'Date of birth': '1910-03-24'
+        },
+        {
+          'First Name': 'Ricardo',
+          'Last Name': 'Hinton',
+          'Date of birth': '1924-03-26'
+        },
+        {
+          'First Name': 'Jared',
+          'Last Name': 'Mitchell',
+          'Date of birth': '1921-01-18'
+        },
+        {
+          'First Name': 'Louis',
+          'Last Name': 'Payne',
+          'Date of birth': '1916-01-29'
+        },
+        {
+          'First Name': 'Brian',
+          'Last Name': 'Oconnell',
+          'Date of birth': '1911-10-23'
+        }
+      ]
     }
   ];
 
