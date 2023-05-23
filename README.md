@@ -4,7 +4,7 @@
 
 ## Introduction
 
-QoT (Query over Table) is a powerful command-line tool that allows you to query data from tables or sheets. With QoT, you can easily filter, sort, and display data from CSV, TSV, PSV, HTML, JSON, and YAML files.
+QoT (Query over Table) is a powerful command-line tool that allows you to query data from tables or sheets. With QoT, you can easily filter & sort data from a CSV file and display the result in any of these supported formats: CSV, TSV, PSV, HTML table, JSON, YAML, ASCII grid table, Markdown table, or borderless table (default).
 
 QoT is designed to be easy to use and provides a wide range of options for customizing your queries. Whether you're a data analyst looking to quickly extract insights from large datasets or a developer looking to integrate QoT into your workflow, QoT has something to offer.
 
@@ -85,7 +85,7 @@ Options:
      --html                 Print in HTML table format
      --json                 Print in JSON format
      --yaml                 Print in YAML format
-     --ascii                Print in ASCII table format
+     --ascii                Print in ASCII grid table format
      --md                   Print in Markdown table format
 
 Usage:

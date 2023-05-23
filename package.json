@@ -1,6 +1,6 @@
 {
   "name": "qot-cli",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Query over Table (QoT) CLI can be used to query over CSV",
   "type": "module",
   "main": "index.js",

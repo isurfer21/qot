@@ -47,7 +47,7 @@ Options:
      --html                 Print in HTML table format
      --json                 Print in JSON format
      --yaml                 Print in YAML format
-     --ascii                Print in ASCII table format
+     --ascii                Print in ASCII grid table format
      --md                   Print in Markdown table format
 
 Usage:
