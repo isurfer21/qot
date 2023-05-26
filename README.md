@@ -5,7 +5,7 @@
 ![Tool for CSV](https://img.shields.io/badge/tool_for-CSV-blue)
 ![Parser SQL](https://img.shields.io/badge/parser-SQL-blue) 
 ![Support 2 million records](https://img.shields.io/badge/support-2M+_records-brightgreen) 
-![Tests 100% passed](https://img.shields.io/badge/tests-100%_passed-green)
+![Tests 100+ passed](https://img.shields.io/badge/tests-100+_passed-green)
 ![Build passing](https://img.shields.io/badge/build-passing-green)
 ![License MIT](https://img.shields.io/badge/license-MIT-blue) 
 
