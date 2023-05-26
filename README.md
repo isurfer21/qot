@@ -1,6 +1,31 @@
 # qot
 
+> A command-line utility for CSV data analysis
+
 **Query over Table**, a.k.a., **QoT** is a command-line tool that allows you to query data from tables or sheets.
+
+<!-- TOC -->
+
+- [qot](#qot)
+    - [Introduction](#introduction)
+        - [How the qot tool works?](#how-the-qot-tool-works)
+    - [Prerequisite](#prerequisite)
+    - [Installation](#installation)
+    - [Manual Setup](#manual-setup)
+    - [Usage](#usage)
+        - [Quoting and dotting spaces in query statements](#quoting-and-dotting-spaces-in-query-statements)
+    - [Contributing](#contributing)
+    - [License](#license)
+- [FAQ](#faq)
+    - [How to perform a query?](#how-to-perform-a-query)
+        - [Using --select option](#using---select-option)
+        - [Using --from option](#using---from-option)
+        - [Using --where option](#using---where-option)
+        - [Using --orderby option with --asc & --desc](#using---orderby-option-with---asc----desc)
+    - [How to use the date-time format in the qot tool?](#how-to-use-the-date-time-format-in-the-qot-tool)
+    - [How to use spaces in command line arguments for qot tool on Windows?](#how-to-use-spaces-in-command-line-arguments-for-qot-tool-on-windows)
+
+<!-- /TOC -->
 
 ## Introduction
 
@@ -10,9 +35,9 @@ QoT is designed to be easy to use and provides a wide range of options for custo
 
 In this guide, we'll introduce you to the basics of using QoT and show you how to get started with querying your data.
 
-### Working
+### How the `qot` tool works?
 
-This program uses the `csv-parse` and `minimist` modules to parse CSV data and command-line arguments, respectively. The program filters the data based on the conditions specified by the `--where` options and sorts the data based on the column specified by the `--orderby` option. The program also limits the number of rows displayed based on the value specified by the `--limit` option.
+This program uses the `csv-parse` and `minimist` modules to parse CSV data and command-line arguments, respectively. The program filters the data based on the conditions specified by the `--where` options and sorts the data based on the column specified by the `--orderby` option. The program also limits the number of rows displayed based on the value specified by the `--limit` option. Finally, it prints data for selected columns specified by the `--select` option.
 
 You can run this program from the command line by passing the appropriate arguments. For example:
 
@@ -96,7 +121,7 @@ Usage:
 
 ```
 
-### Important Tips
+### Quoting and dotting spaces in query statements
 
 When defining a query statement, it's important to consider the conditions in the `--where` clause and coumn names in `--select` clause. If the column name or cell value contains spaces, you can use one of the following formats on the command line to avoid unintended results.
 
@@ -136,25 +161,15 @@ e.g., if you want to search for rows where the `Job Title` is `Market Researcher
 'Job..Title'..=..'Market..Researcher'
 ```
 
-## How to use spaces in command line arguments for `qot` tool on Windows?
+## Contributing
 
-If the command line arguments contain spaces, we may encounter this issue on Windows with the login `Abhishek Kumar`.
+If you'd like to contribute to the development of QoT, please check out our [contributing guidelines](https://github.com/isurfer21/qot/blob/master/CONTRIBUTING.md).
 
-```
-PS D:\> qot --select "sum('Number of employees')" --from ".\organizations.csv" --where "Country=India"
-'C:\Users\Abhishek' is not recognized as an internal or external command,
-operable program or batch file.
-```
+## License
 
-The problem is that the command line interpreter is trying to execute `C:\Users\Abhishek` as a separate command, because it sees a space after `Abhishek`. This causes an error because there is no such command. The space is part of the path to the `qot` command, which is a tool that allows you to query data from tables or sheets.
+QoT is licensed under the [MIT License](https://github.com/isurfer21/qot/blob/master/LICENSE).
 
-The possible solution is to use double dots (`..`) instead of spaces in the command line arguments that contain spaces. This tells the `qot` tool to treat the double dots as spaces when parsing the arguments. For example, if you want to select the sum of the `Number of employees` column from the `organizations.csv` file where the `Country` column is equal to `India`, you can use the following command:
-
-```cmd
-qot --select "sum('Number..of..employees')" --from ".\organizations.csv" --where "Country..=..India"
-```
-
-This way, the command line interpreter will not split the arguments at spaces, and the `qot` tool will replace the double dots with spaces when processing the query. This will avoid similar kind of path with space error, even after enclosing the string with spaces.
+# FAQ
 
 ## How to perform a query?
 
@@ -331,10 +346,67 @@ The `--orderby` option is used to sort the query result by a certain column. You
 
 Note: Sorting the query result by multiple columns is not yet supported.
 
-## Contributing
+## How to use the date-time format in the `qot` tool?
 
-If you'd like to contribute to the development of QoT, please check out our [contributing guidelines](https://github.com/isurfer21/qot/blob/master/CONTRIBUTING.md).
+The `qot` tool uses the **ISO 8601 extended format** to handle date and time data. This is a common and clear way of writing date and time values that avoids confusion and allows easy comparison. The ISO 8601 extended format looks like this: `YYYY-MM-DDTHH:mm:ss.sssZ`.
 
-## License
+Here is what each part of the format means:
 
-QoT is licensed under the [MIT License](https://github.com/isurfer21/qot/blob/master/LICENSE).
+- `YYYY` is the year in four digits. For example, 2023.
+- `MM` is the month in two digits. For example, 05 for May.
+- `DD` is the day in two digits. For example, 26.
+- `T` is a letter that separates the date and time parts.
+- `HH` is the hour in two digits, using the 24-hour clock. For example, 07 for 7 a.m. or 19 for 7 p.m.
+- `mm` is the minute in two digits. For example, 32.
+- `ss` is the second in two digits. For example, 51.
+- `sss` is the fractional second in one to six digits. For example, 123 for 0.123 seconds. This part is optional.
+- `Z` is a letter that indicates UTC (Coordinated Universal Time) timezone. This means that the date and time value is the same everywhere in the world. This part is optional.
+- `[+-]hh:mm` is an alternative way of specifying the timezone, by giving the difference from UTC in hours and minutes. For example, +05:30 means that the date and time value is 5 hours and 30 minutes ahead of UTC. This part is optional.
+
+The `qot` tool can accept different variations of the _ISO 8601 extended format_, as long as they follow this pattern:
+
+```
+YYYY-MM-DD(THH:mm(:ss(.sss)?)?(Z|[+-]hh:mm)?)?
+```
+
+where, 
+
+- The _parentheses_ mean that some parts are optional.
+- The _pipe_ means otherwise which is used to separate two alternative options for a part of the format.
+- The _question mark_ means that they can appear zero or one times.
+
+Here are some examples of _valid_ date-time values for the qot tool:
+
+- 2023-05-26
+- 2023-05-26T07:32:51
+- 2023-05-26T07:32:51.123
+- 2023-05-26T07:32:51Z
+- 2023-05-26T07:32:51.123Z
+- 2023-05-26T07:32:51+05:30
+- 2023-05-26T07:32:51.123+05:30
+
+Here are some examples of _invalid_ date-time values for the qot tool:
+
+- 23-05-26 (the year must have four digits)
+- 2023/05/26 (the separators must be hyphens)
+- 2023-05-26T073251 (the time parts must have colons)
+
+## How to use spaces in command line arguments for `qot` tool on Windows?
+
+If the command line arguments contain spaces, we may encounter this issue on Windows with the login `Abhishek Kumar`.
+
+```
+PS D:\> qot --select "sum('Number of employees')" --from ".\organizations.csv" --where "Country=India"
+'C:\Users\Abhishek' is not recognized as an internal or external command,
+operable program or batch file.
+```
+
+The problem is that the command line interpreter is trying to execute `C:\Users\Abhishek` as a separate command, because it sees a space after `Abhishek`. This causes an error because there is no such command. The space is part of the path to the `qot` command, which is a tool that allows you to query data from tables or sheets.
+
+The possible solution is to use double dots (`..`) instead of spaces in the command line arguments that contain spaces. This tells the `qot` tool to treat the double dots as spaces when parsing the arguments. For example, if you want to select the sum of the `Number of employees` column from the `organizations.csv` file where the `Country` column is equal to `India`, you can use the following command:
+
+```cmd
+qot --select "sum('Number..of..employees')" --from ".\organizations.csv" --where "Country..=..India"
+```
+
+This way, the command line interpreter will not split the arguments at spaces, and the `qot` tool will replace the double dots with spaces when processing the query. This will avoid similar kind of path with space error, even after enclosing the string with spaces.
