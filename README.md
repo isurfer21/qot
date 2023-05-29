@@ -178,6 +178,14 @@ QoT is licensed under the [MIT License](https://github.com/isurfer21/qot/blob/ma
 
 # FAQ
 
+This section provides answers to some of the frequently asked questions about the qot tool. The qot tool is a command line utility that allows you to query and manipulate data in JSON files. You can use various options to specify the query criteria and the output format. 
+
+Some of the topics covered in this section are:
+
+- [How to perform a query using different options such as --select, --from, --where, and --orderby?](#how-to-perform-a-query)
+- [How to use the date-time format in the qot tool to filter and sort data by date and time values?](#how-to-use-the-date-time-format-in-the-qot-tool)
+- [How to use spaces in command line arguments for qot tool on Windows without causing errors or unexpected results?](#how-to-use-spaces-in-command-line-arguments-for-qot-tool-on-windows)
+
 ## How to perform a query?
 
 To perform a query on a `.csv` file that contains tabular data, you need to use the `--select` option to specify the columns you want to display and the `--from` option to specify the file name. If you want to apply a condition to filter the query result, you can use the `--where` option. If you want to limit the number of rows in the query result, you can use the `--limit` option. If you want to sort the query result by a certain column, you can use the `--orderby` option and choose either `--asc` or `--desc` to order the result in ascending or descending order.
