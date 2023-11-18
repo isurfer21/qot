@@ -21,6 +21,7 @@
     - [Manual Setup](#manual-setup)
     - [Usage](#usage)
         - [Quoting and dotting spaces in query statements](#quoting-and-dotting-spaces-in-query-statements)
+    - [Architecture](#architecture)
     - [Contributing](#contributing)
     - [License](#license)
 - [FAQ](#faq)
@@ -53,6 +54,8 @@ qot --select firstname,lastname,mobile,email --from sample.csv --where age<30 --
 ```
 
 This command will select the `firstname`, `lastname`, `mobile`, and `email` columns from the `sample.csv` file where the `age` is less than `30`. The results will be sorted by `age` in descending order and only the first `10` rows will be displayed.
+
+![QoT CLI Options - WBS Diagram](docs/cli-opt-wbs-diag.svg)
 
 ## Prerequisite
 You should have these applications installed at your system.
@@ -167,6 +170,10 @@ e.g., if you want to search for rows where the `Job Title` is `Market Researcher
 ```
 'Job..Title'..=..'Market..Researcher'
 ```
+
+## Architecture
+
+![QoT - Component Diagram](docs/com-diag.svg)
 
 ## Contributing
 

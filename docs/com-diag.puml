@@ -1,0 +1,72 @@
+@startuml
+
+scale max 1920 width
+top to bottom direction
+
+skinparam linetype ortho
+skinparam arrowColor skyblue
+
+' oval
+skinparam usecase {
+  backgroundColor mistyrose
+  borderThickness 1
+}
+
+' rectangle
+skinparam rectangle {
+  backgroundColor lavender
+  borderThickness 0.5
+}
+
+' component
+skinparam component {
+  backgroundColor honeydew
+  borderThickness 1
+}
+
+title QoT - Component Diagram
+
+(<b>index</b>)
+rectangle "aggregator" as _aggregator
+rectangle "filter" as _filter
+rectangle "lexer" as _lexer
+rectangle "orderby" as _orderby
+rectangle "select-ast" as _select_ast
+rectangle "select-clause" as _select_clause
+rectangle "select-lexer" as _select_lexer
+rectangle "select-parser" as _select_parser
+rectangle "tabulator" as _tabulator
+rectangle "trimmer" as _trimmer
+rectangle "utility" as _utility
+rectangle "where-ast" as _where_ast
+rectangle "where-clause" as _where_clause
+rectangle "where-lexer" as _where_lexer
+rectangle "where-parser" as _where_parser
+
+package "Dependencies" {
+  [minimist]
+  [yaml]
+}
+
+(<b>index</b>) -[thickness=1]> _aggregator
+(<b>index</b>) -[thickness=1]> _filter
+(<b>index</b>) --[thickness=1]> [minimist]
+(<b>index</b>) -[thickness=1]> _orderby
+(<b>index</b>) --[thickness=1]> _select_clause
+(<b>index</b>) -[thickness=1]> _tabulator
+(<b>index</b>) -[#LightGray,thickness=1]> _utility
+(<b>index</b>) --[thickness=1]> _where_clause
+_orderby --[#LightGray]> _utility
+_select_ast --[#DarkKhaki]> _select_lexer
+_select_ast --[#DarkKhaki]> _select_parser
+_select_clause --[#DarkKhaki]> _select_ast
+_select_clause ---[#LightGray]> _utility
+_select_lexer --[#DarkKhaki]> _lexer
+_tabulator ---> [yaml]
+_where_ast ---[#Plum]> _trimmer
+_where_ast --[#Plum]> _where_lexer
+_where_ast --[#Plum]> _where_parser
+_where_clause --[#LightGray]> _utility
+_where_clause --[#Plum]> _where_ast
+
+@enduml

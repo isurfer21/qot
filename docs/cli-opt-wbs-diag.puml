@@ -1,0 +1,23 @@
+@startwbs
+
+title QoT CLI Options - WBS Diagram
+
+*[#LightBlue] qot
+**[#Pink] select
+*** firstname
+*** lastname
+*** mobile
+*** email
+**[#Pink] from
+*** sample.csv
+**[#Pink] where
+*** age<30
+**[#Pink] limit
+*** 10
+**[#Pink] orderby
+*** age
+**[#Pink] asc / desc
+
+@endwbs
+
+
